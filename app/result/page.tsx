@@ -1,13 +1,13 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
-import Header from '@/components/Header';
-import ResultCard from '@/components/ResultCard';
-import KnowledgeGraph from '@/components/KnowledgeGraph';
-import ShareButtons from '@/components/ShareButtons';
-import BannerAd from '@/components/BannerAd';
-import LoadingOverlay from '@/components/LoadingOverlay';
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import Header from "@/components/Header";
+import ResultCard from "@/components/ResultCard";
+import KnowledgeGraph from "@/components/KnowledgeGraph";
+import ShareButtons from "@/components/ShareButtons";
+import BannerAd from "@/components/BannerAd";
+import LoadingOverlay from "@/components/LoadingOverlay";
 
 interface AnalysisResult {
   problem: string;
@@ -36,31 +36,35 @@ export default function ResultPage() {
   const router = useRouter();
 
   useEffect(() => {
-    const analysisData = sessionStorage.getItem('analysisData');
-    
+    const analysisData = sessionStorage.getItem("analysisData");
+
     if (!analysisData) {
-      router.push('/');
+      router.push("/");
       return;
     }
 
     const data = JSON.parse(analysisData);
-    
-    // Mock API call to generate result
-    setTimeout(() => {
+
+    // GEMINI APIから取得した結果を使用
+    if (data.result) {
+      setResult(data.result);
+      setIsLoading(false);
+    } else {
+      // フォールバック用のモックデータ
       const mockResult: AnalysisResult = {
         problem: data.text || "Uploaded image analysis",
         knowledgeMap: {
           core_concepts: [
             "Problem decomposition",
-            "Research methodology", 
+            "Research methodology",
             "Critical thinking",
             "Resource identification",
-            "Solution validation"
+            "Solution validation",
           ],
           prerequisites: [
             "Basic analytical skills",
             "Information literacy",
-            "Time management"
+            "Time management",
           ],
           difficulty_level: "Intermediate",
           estimated_time: "2-4 weeks",
@@ -68,39 +72,65 @@ export default function ResultPage() {
             {
               step: 1,
               topic: "Problem Analysis",
-              description: "Break down the problem into smaller, manageable components",
-              resources: ["Problem-solving frameworks", "Mind mapping tools"]
+              description:
+                "Break down the problem into smaller, manageable components",
+              resources: ["Problem-solving frameworks", "Mind mapping tools"],
             },
             {
               step: 2,
               topic: "Research Phase",
-              description: "Gather relevant information and identify knowledge gaps",
-              resources: ["Academic databases", "Expert interviews", "Case studies"]
+              description:
+                "Gather relevant information and identify knowledge gaps",
+              resources: [
+                "Academic databases",
+                "Expert interviews",
+                "Case studies",
+              ],
             },
             {
               step: 3,
               topic: "Solution Development",
               description: "Develop and test potential solutions",
-              resources: ["Prototyping tools", "Testing frameworks", "Feedback systems"]
+              resources: [
+                "Prototyping tools",
+                "Testing frameworks",
+                "Feedback systems",
+              ],
             },
             {
               step: 4,
               topic: "Implementation",
               description: "Execute the solution and monitor progress",
-              resources: ["Project management tools", "Progress tracking", "Iteration methods"]
-            }
-          ]
+              resources: [
+                "Project management tools",
+                "Progress tracking",
+                "Iteration methods",
+              ],
+            },
+          ],
         },
         dependencies: [
-          { from: "Problem Analysis", to: "Research Phase", relationship: "prerequisite" },
-          { from: "Research Phase", to: "Solution Development", relationship: "prerequisite" },
-          { from: "Solution Development", to: "Implementation", relationship: "prerequisite" }
-        ]
+          {
+            from: "Problem Analysis",
+            to: "Research Phase",
+            relationship: "prerequisite",
+          },
+          {
+            from: "Research Phase",
+            to: "Solution Development",
+            relationship: "prerequisite",
+          },
+          {
+            from: "Solution Development",
+            to: "Implementation",
+            relationship: "prerequisite",
+          },
+        ],
       };
-      
+
       setResult(mockResult);
       setIsLoading(false);
-    }, 2000);
+    }
   }, [router]);
 
   if (isLoading) {
@@ -125,7 +155,7 @@ export default function ResultPage() {
                 Here's your knowledge roadmap
               </p>
             </div>
-            
+
             <ResultCard result={result} />
             <KnowledgeGraph dependencies={result.dependencies} />
             <ShareButtons />

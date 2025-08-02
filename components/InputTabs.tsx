@@ -1,33 +1,33 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { Link, Type, Upload } from 'lucide-react';
-import UrlInput from './UrlInput';
-import TextInput from './TextInput';
-import FileInput from './FileInput';
+import { useState } from "react";
+import { Link, Type, Upload } from "lucide-react";
+import UrlInput from "./UrlInput";
+import TextInput from "./TextInput";
+import FileInput from "./FileInput";
 
 interface InputTabsProps {
   onAnalyze: (data: { text: string; image: File | null; url: string }) => void;
 }
 
-type TabType = 'url' | 'text' | 'file';
+type TabType = "url" | "text" | "file";
 
 export default function InputTabs({ onAnalyze }: InputTabsProps) {
-  const [activeTab, setActiveTab] = useState<TabType>('text');
+  const [activeTab, setActiveTab] = useState<TabType>("text");
 
   const tabs = [
-    { id: 'url' as TabType, label: 'URL', icon: Link },
-    { id: 'text' as TabType, label: 'Text', icon: Type },
-    { id: 'file' as TabType, label: 'File', icon: Upload },
+    { id: "url" as TabType, label: "URL", icon: Link },
+    { id: "text" as TabType, label: "Text", icon: Type },
+    { id: "file" as TabType, label: "File", icon: Upload },
   ];
 
   const renderActiveComponent = () => {
     switch (activeTab) {
-      case 'url':
+      case "url":
         return <UrlInput onAnalyze={onAnalyze} />;
-      case 'text':
+      case "text":
         return <TextInput onAnalyze={onAnalyze} />;
-      case 'file':
+      case "file":
         return <FileInput onAnalyze={onAnalyze} />;
       default:
         return <TextInput onAnalyze={onAnalyze} />;
@@ -35,9 +35,9 @@ export default function InputTabs({ onAnalyze }: InputTabsProps) {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="glass-effect rounded-2xl shadow-lg overflow-hidden group">
       {/* Tab Navigation */}
-      <div className="flex glass-effect rounded-2xl p-1.5 shadow-lg">
+      <div className="flex p-1.5 bg-white/20">
         {tabs.map((tab) => {
           const Icon = tab.icon;
           return (
@@ -46,8 +46,8 @@ export default function InputTabs({ onAnalyze }: InputTabsProps) {
               onClick={() => setActiveTab(tab.id)}
               className={`flex-1 flex items-center justify-center space-x-2 py-3 px-4 rounded-lg font-medium text-sm transition-all duration-200 ${
                 activeTab === tab.id
-                  ? 'bg-gradient-to-r from-indigo-500 to-purple-600 text-white shadow-lg glow-effect'
-                  : 'text-gray-700 hover:text-gray-900 hover:bg-white/50'
+                  ? "bg-gradient-to-r from-indigo-500 to-purple-600 text-white shadow-lg glow-effect"
+                  : "text-gray-700 hover:text-gray-900 hover:bg-white/50"
               }`}
             >
               <Icon className="w-4 h-4" />
@@ -57,10 +57,11 @@ export default function InputTabs({ onAnalyze }: InputTabsProps) {
         })}
       </div>
 
+      {/* Divider */}
+      <div className="border-2 border-dashed border-gray-300 group-hover:border-indigo-400 transition-all duration-300"></div>
+
       {/* Active Component */}
-      <div className="min-h-[400px] glass-effect rounded-2xl p-6 shadow-lg card-hover">
-        {renderActiveComponent()}
-      </div>
+      <div className="min-h-[400px] p-6">{renderActiveComponent()}</div>
     </div>
   );
 }

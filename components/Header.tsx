@@ -1,9 +1,9 @@
-import Link from 'next/link';
-import { Brain } from 'lucide-react';
+import Link from "next/link";
+import { Brain } from "lucide-react";
 
 export default function Header() {
   return (
-    <header className="glass-effect border-b border-white/20 px-4 py-6 flex-shrink-0 z-50 shadow-lg">
+    <header className="glass-effect border-b border-white/20 px-4 py-3 flex-shrink-0 z-50 shadow-lg">
       <div className="max-w-6xl mx-auto">
         <Link href="/" className="flex items-center space-x-3">
           <div className="flex items-center justify-center w-12 h-12 bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 rounded-2xl shadow-lg floating-animation">

@@ -1,6 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: 'export',
+  // 開発環境ではAPIルートを使用するため、output: 'export'をコメントアウト
+  // output: 'export',
   eslint: {
     ignoreDuringBuilds: true,
   },
