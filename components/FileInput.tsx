@@ -1,0 +1,157 @@
+'use client';
+
+import { useState } from 'react';
+import { Upload, Zap, Image, FileText, X } from 'lucide-react';
+
+interface FileInputProps {
+  onAnalyze: (data: { text: string; image: File | null; url: string }) => void;
+}
+
+export default function FileInput({ onAnalyze }: FileInputProps) {
+  const [file, setFile] = useState<File | null>(null);
+  const [dragActive, setDragActive] = useState(false);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (file) {
+      onAnalyze({ text: '', image: file, url: '' });
+    }
+  };
+
+  const handleDrag = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (e.type === "dragenter" || e.type === "dragover") {
+      setDragActive(true);
+    } else if (e.type === "dragleave") {
+      setDragActive(false);
+    }
+  };
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setDragActive(false);
+    
+    const files = e.dataTransfer.files;
+    if (files && files[0] && isValidFileType(files[0])) {
+      setFile(files[0]);
+    }
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (files && files[0] && isValidFileType(files[0])) {
+      setFile(files[0]);
+    }
+  };
+
+  const isValidFileType = (file: File) => {
+    const validTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp', 'text/plain', 'application/pdf'];
+    return validTypes.includes(file.type);
+  };
+
+  const removeFile = () => {
+    setFile(null);
+  };
+
+  const getFileIcon = (file: File) => {
+    if (file.type.startsWith('image/')) {
+      return <Image className="w-6 h-6 text-blue-500" />;
+    }
+    return <FileText className="w-6 h-6 text-green-500" />;
+  };
+
+  const formatFileSize = (bytes: number) => {
+    if (bytes === 0) return '0 Bytes';
+    const k = 1024;
+    const sizes = ['Bytes', 'KB', 'MB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+  };
+
+  return (
+    <form onSubmit={handleSubmit} className="space-y-6">
+      <div>
+        <label className="block text-sm font-semibold text-gray-800 mb-3">
+          Upload file to analyze
+        </label>
+        
+        {!file ? (
+          <div
+            className={`relative border-2 border-dashed rounded-2xl p-10 text-center transition-all duration-300 ${
+              dragActive 
+                ? 'border-indigo-500 bg-indigo-50 shadow-lg' 
+                : 'border-gray-300 hover:border-indigo-400 hover:bg-gray-50'
+            }`}
+            onDragEnter={handleDrag}
+            onDragLeave={handleDrag}
+            onDragOver={handleDrag}
+            onDrop={handleDrop}
+          >
+            <input
+              type="file"
+              accept="image/*,.txt,.pdf"
+              onChange={handleFileChange}
+              className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+            />
+            <div className="space-y-4">
+              <Upload className="w-16 h-16 text-indigo-400 mx-auto floating-animation" />
+              <div>
+                <p className="text-lg font-semibold text-gray-800 mb-2">
+                  Drop your file here, or click to select
+                </p>
+                <p className="text-sm text-gray-600 font-medium">
+                  Supports images, text files, and PDFs (max 10MB)
+                </p>
+              </div>
+            </div>
+          </div>
+        ) : (
+          <div className="bg-gradient-to-r from-gray-50 to-blue-50 rounded-xl p-5 border border-gray-200">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-3">
+                {getFileIcon(file)}
+                <div>
+                  <p className="font-semibold text-gray-900">{file.name}</p>
+                  <p className="text-sm text-gray-600 font-medium">{formatFileSize(file.size)}</p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={removeFile}
+                className="p-2 hover:bg-red-100 rounded-full transition-colors"
+              >
+                <X className="w-4 h-4 text-red-500" />
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
+
+      <div className="bg-gradient-to-r from-purple-50 to-pink-50 rounded-xl p-5 border border-purple-200">
+        <h4 className="font-semibold text-purple-900 mb-3">Supported file types:</h4>
+        <ul className="text-sm text-purple-800 space-y-2 font-medium">
+          <li>• <strong>Images:</strong> Screenshots, diagrams, charts, handwritten notes</li>
+          <li>• <strong>Text files:</strong> Code snippets, requirements, documentation</li>
+          <li>• <strong>PDFs:</strong> Research papers, tutorials, specifications</li>
+        </ul>
+      </div>
+
+      <button
+        type="submit"
+        disabled={!file}
+        className="w-full bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white py-4 px-6 rounded-xl font-semibold text-lg flex items-center justify-center space-x-2 hover:shadow-2xl hover:shadow-purple-500/25 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] glow-effect"
+      >
+        <Zap className="w-5 h-5" />
+        <span>Analyze File</span>
+      </button>
+      
+      {!file && (
+        <p className="text-xs text-gray-600 text-center font-medium">
+          Please upload a file to analyze
+        </p>
+      )}
+    </form>
+  );
+}
