@@ -18,20 +18,28 @@ export default function Guide() {
               <div className="space-y-8">
                 <section>
                   <h2 className="text-2xl font-semibold text-gray-900 mb-4">
-                    Getting Started
+                    What is CAN_I_DO_THIS??
                   </h2>
                   <p className="text-gray-700 mb-4">
-                    CAN_I_DO_THIS?? is an AI-powered tool that helps you analyze
-                    problems and visualize the knowledge required to solve them.
-                    Here's how to get started:
+                    CAN_I_DO_THIS?? is an AI-powered problem analysis tool that
+                    helps you understand what knowledge and skills you need to
+                    solve any problem. It creates visual knowledge maps and
+                    learning roadmaps tailored to your specific challenges.
                   </p>
+                  <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-4 rounded-lg">
+                    <p className="text-indigo-800 font-medium">
+                      ✨ Simply describe your problem, and get a complete
+                      breakdown of concepts, prerequisites, difficulty levels,
+                      and step-by-step learning paths!
+                    </p>
+                  </div>
                 </section>
 
                 <section>
                   <h2 className="text-2xl font-semibold text-gray-900 mb-4">
                     Step 1: Choose Your Input Method
                   </h2>
-                  <div className="grid md:grid-cols-3 gap-6">
+                  <div className="grid md:grid-cols-2 gap-6">
                     <div className="bg-gradient-to-br from-blue-50 to-indigo-50 p-6 rounded-xl">
                       <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-indigo-500 rounded-lg flex items-center justify-center mb-4">
                         <svg
@@ -51,11 +59,20 @@ export default function Guide() {
                       <h3 className="text-lg font-semibold text-gray-900 mb-2">
                         Text Input
                       </h3>
-                      <p className="text-gray-600">
-                        Simply type or paste your problem description into the
-                        text area. Be as detailed as possible for better
-                        analysis.
+                      <p className="text-gray-600 mb-3">
+                        Type or paste your problem description. The more
+                        detailed you are, the better analysis you&apos;ll
+                        receive.
                       </p>
+                      <div className="bg-white p-3 rounded border border-blue-200">
+                        <p className="text-sm text-gray-600 font-medium">
+                          Example:
+                        </p>
+                        <p className="text-sm text-gray-700 italic">
+                          &quot;I want to build a mobile app but don&apos;t know
+                          programming. What do I need to learn?&quot;
+                        </p>
+                      </div>
                     </div>
 
                     <div className="bg-gradient-to-br from-purple-50 to-pink-50 p-6 rounded-xl">
@@ -70,50 +87,33 @@ export default function Guide() {
                             strokeLinecap="round"
                             strokeLinejoin="round"
                             strokeWidth={2}
-                            d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                            d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
                           />
                         </svg>
                       </div>
                       <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                        Image Upload
+                        File Upload
                       </h3>
-                      <p className="text-gray-600">
-                        Upload an image containing your problem. The AI will
-                        analyze the visual content and extract relevant
+                      <p className="text-gray-600 mb-3">
+                        Upload documents, images, or files related to your
+                        problem. Our AI will analyze and extract key
                         information.
                       </p>
-                    </div>
-
-                    <div className="bg-gradient-to-br from-green-50 to-teal-50 p-6 rounded-xl">
-                      <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-teal-500 rounded-lg flex items-center justify-center mb-4">
-                        <svg
-                          className="w-6 h-6 text-white"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"
-                          />
-                        </svg>
+                      <div className="bg-white p-3 rounded border border-purple-200">
+                        <p className="text-sm text-gray-600 font-medium">
+                          Supported:
+                        </p>
+                        <p className="text-sm text-gray-700">
+                          Images, PDFs, Text files, Documents
+                        </p>
                       </div>
-                      <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                        URL Input
-                      </h3>
-                      <p className="text-gray-600">
-                        Paste a URL to analyze content from a webpage. The tool
-                        will extract and analyze the relevant information.
-                      </p>
                     </div>
                   </div>
                 </section>
 
                 <section>
                   <h2 className="text-2xl font-semibold text-gray-900 mb-4">
-                    Step 2: Submit for Analysis
+                    Step 2: AI Analysis Process
                   </h2>
                   <div className="bg-gradient-to-r from-yellow-50 to-orange-50 p-6 rounded-xl">
                     <div className="flex items-start space-x-4">
@@ -122,18 +122,18 @@ export default function Guide() {
                       </div>
                       <div>
                         <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                          Click "Analyze"
+                          Click &quot;Analyze&quot;
                         </h3>
                         <p className="text-gray-700 mb-4">
-                          Once you've entered your problem, click the "Analyze"
-                          button. Our AI will process your input and generate a
-                          comprehensive analysis.
+                          Once you&apos;ve entered your problem, click the
+                          &quot;Analyze&quot; button. Our AI will process your
+                          input and generate a comprehensive knowledge analysis.
                         </p>
                         <div className="bg-white p-4 rounded-lg border border-yellow-200">
                           <p className="text-sm text-gray-600">
-                            <strong>Tip:</strong> The analysis typically takes
-                            10-30 seconds. Please be patient while our AI
-                            processes your request.
+                            <strong>Processing Time:</strong> Analysis typically
+                            takes 10-30 seconds. The AI examines your problem
+                            and creates a complete knowledge breakdown.
                           </p>
                         </div>
                       </div>
@@ -143,46 +143,94 @@ export default function Guide() {
 
                 <section>
                   <h2 className="text-2xl font-semibold text-gray-900 mb-4">
-                    Step 3: Review Your Results
+                    Step 3: Understanding Your Results
                   </h2>
                   <div className="space-y-4">
                     <div className="bg-gradient-to-r from-indigo-50 to-purple-50 p-6 rounded-xl">
                       <h3 className="text-lg font-semibold text-gray-900 mb-3">
-                        Knowledge Graph Visualization
+                        📊 Knowledge Graph Visualization
                       </h3>
                       <p className="text-gray-700 mb-4">
-                        View an interactive knowledge graph that shows the
+                        Explore an interactive knowledge graph that shows the
                         relationships between different concepts and skills
                         needed to solve your problem.
                       </p>
                       <ul className="list-disc pl-6 space-y-2 text-gray-700">
-                        <li>Explore connected concepts by clicking on nodes</li>
-                        <li>Zoom in/out to see different levels of detail</li>
-                        <li>Hover over connections to see relationships</li>
+                        <li>Interactive nodes representing key concepts</li>
+                        <li>Visual connections showing dependencies</li>
+                        <li>Prerequisites and relationships mapped out</li>
                       </ul>
                     </div>
 
                     <div className="bg-gradient-to-r from-green-50 to-blue-50 p-6 rounded-xl">
                       <h3 className="text-lg font-semibold text-gray-900 mb-3">
-                        Detailed Analysis
+                        📋 Detailed Knowledge Map
                       </h3>
                       <p className="text-gray-700 mb-4">
-                        Read through the comprehensive analysis that includes:
+                        Review your comprehensive analysis that includes:
                       </p>
                       <ul className="list-disc pl-6 space-y-2 text-gray-700">
-                        <li>Problem breakdown and key components</li>
-                        <li>Required skills and knowledge areas</li>
-                        <li>Step-by-step solution approach</li>
-                        <li>Potential challenges and solutions</li>
-                        <li>Recommended learning resources</li>
+                        <li>
+                          <strong>Core Concepts:</strong> Essential knowledge
+                          areas you need to master
+                        </li>
+                        <li>
+                          <strong>Prerequisites:</strong> Foundational skills
+                          required before starting
+                        </li>
+                        <li>
+                          <strong>Difficulty Level:</strong> Complexity
+                          assessment (Beginner/Intermediate/Advanced)
+                        </li>
+                        <li>
+                          <strong>Estimated Time:</strong> Projected learning
+                          timeline
+                        </li>
+                        <li>
+                          <strong>Learning Path:</strong> Step-by-step
+                          progression with resources
+                        </li>
                       </ul>
+                    </div>
+
+                    <div className="bg-gradient-to-r from-rose-50 to-pink-50 p-6 rounded-xl">
+                      <h3 className="text-lg font-semibold text-gray-900 mb-3">
+                        🎯 Step-by-Step Learning Path
+                      </h3>
+                      <p className="text-gray-700 mb-4">
+                        Follow a structured learning journey:
+                      </p>
+                      <div className="grid md:grid-cols-2 gap-4">
+                        <div className="bg-white p-4 rounded-lg border border-rose-200">
+                          <h4 className="font-semibold text-gray-900 mb-2">
+                            Each Step Includes:
+                          </h4>
+                          <ul className="text-sm text-gray-700 space-y-1">
+                            <li>• Topic focus area</li>
+                            <li>• Clear description</li>
+                            <li>• Recommended resources</li>
+                            <li>• Progress milestones</li>
+                          </ul>
+                        </div>
+                        <div className="bg-white p-4 rounded-lg border border-rose-200">
+                          <h4 className="font-semibold text-gray-900 mb-2">
+                            Learning Order:
+                          </h4>
+                          <ul className="text-sm text-gray-700 space-y-1">
+                            <li>• Logical progression</li>
+                            <li>• Prerequisite awareness</li>
+                            <li>• Skill building sequence</li>
+                            <li>• Practical application</li>
+                          </ul>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </section>
 
                 <section>
                   <h2 className="text-2xl font-semibold text-gray-900 mb-4">
-                    Tips for Better Results
+                    💡 Tips for Better Results
                   </h2>
                   <div className="grid md:grid-cols-2 gap-6">
                     <div className="space-y-4">
@@ -204,11 +252,11 @@ export default function Guide() {
                         </div>
                         <div>
                           <h4 className="font-semibold text-gray-900">
-                            Be Specific
+                            Be Specific and Detailed
                           </h4>
                           <p className="text-gray-600">
-                            Provide detailed descriptions of your problem for
-                            more accurate analysis.
+                            Include context, goals, constraints, and your
+                            current skill level for more accurate analysis.
                           </p>
                         </div>
                       </div>
@@ -231,11 +279,11 @@ export default function Guide() {
                         </div>
                         <div>
                           <h4 className="font-semibold text-gray-900">
-                            Include Context
+                            Include Your Background
                           </h4>
                           <p className="text-gray-600">
-                            Mention your background, experience level, and
-                            constraints.
+                            Mention your experience level, available time, and
+                            any relevant skills you already have.
                           </p>
                         </div>
                       </div>
@@ -260,11 +308,11 @@ export default function Guide() {
                         </div>
                         <div>
                           <h4 className="font-semibold text-gray-900">
-                            Use Clear Language
+                            State Your End Goal
                           </h4>
                           <p className="text-gray-600">
-                            Write in clear, concise language to help the AI
-                            understand your needs.
+                            Clearly define what you want to achieve to get a
+                            more targeted learning path.
                           </p>
                         </div>
                       </div>
@@ -287,11 +335,11 @@ export default function Guide() {
                         </div>
                         <div>
                           <h4 className="font-semibold text-gray-900">
-                            Share Results
+                            Share Your Results
                           </h4>
                           <p className="text-gray-600">
-                            Use the share buttons to save or share your analysis
-                            with others.
+                            Use the share buttons to save your analysis or share
+                            it with mentors and study partners.
                           </p>
                         </div>
                       </div>
@@ -301,12 +349,74 @@ export default function Guide() {
 
                 <section>
                   <h2 className="text-2xl font-semibold text-gray-900 mb-4">
-                    Need Help?
+                    🎯 Example Use Cases
+                  </h2>
+                  <div className="grid md:grid-cols-2 gap-6">
+                    <div className="bg-gradient-to-br from-cyan-50 to-blue-50 p-6 rounded-xl">
+                      <h3 className="text-lg font-semibold text-gray-900 mb-3">
+                        Career Transition
+                      </h3>
+                      <p className="text-gray-600 mb-3">
+                        &quot;I&apos;m a marketing professional who wants to
+                        become a data scientist. What skills do I need?&quot;
+                      </p>
+                      <div className="text-sm text-blue-800 font-medium">
+                        → Get roadmap for statistics, programming, ML, and
+                        domain knowledge
+                      </div>
+                    </div>
+
+                    <div className="bg-gradient-to-br from-emerald-50 to-green-50 p-6 rounded-xl">
+                      <h3 className="text-lg font-semibold text-gray-900 mb-3">
+                        Academic Project
+                      </h3>
+                      <p className="text-gray-600 mb-3">
+                        &quot;I need to research renewable energy solutions for
+                        my thesis but don&apos;t know where to start.&quot;
+                      </p>
+                      <div className="text-sm text-green-800 font-medium">
+                        → Get structured research methodology and topic
+                        breakdown
+                      </div>
+                    </div>
+
+                    <div className="bg-gradient-to-br from-purple-50 to-pink-50 p-6 rounded-xl">
+                      <h3 className="text-lg font-semibold text-gray-900 mb-3">
+                        Technical Challenge
+                      </h3>
+                      <p className="text-gray-600 mb-3">
+                        &quot;I want to build an e-commerce website but I&apos;m
+                        a complete beginner in web development.&quot;
+                      </p>
+                      <div className="text-sm text-purple-800 font-medium">
+                        → Get step-by-step tech stack and development process
+                      </div>
+                    </div>
+
+                    <div className="bg-gradient-to-br from-orange-50 to-red-50 p-6 rounded-xl">
+                      <h3 className="text-lg font-semibold text-gray-900 mb-3">
+                        Personal Goal
+                      </h3>
+                      <p className="text-gray-600 mb-3">
+                        &quot;I want to learn investing and financial planning
+                        but find it overwhelming.&quot;
+                      </p>
+                      <div className="text-sm text-orange-800 font-medium">
+                        → Get beginner-friendly path through financial concepts
+                      </div>
+                    </div>
+                  </div>
+                </section>
+
+                <section>
+                  <h2 className="text-2xl font-semibold text-gray-900 mb-4">
+                    🤔 Need Help?
                   </h2>
                   <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-6 rounded-xl">
                     <p className="text-gray-700 mb-4">
-                      If you have any questions or need assistance, don't
-                      hesitate to reach out:
+                      If you have questions about using CAN_I_DO_THIS?? or need
+                      assistance with your analysis results, we&apos;re here to
+                      help:
                     </p>
                     <div className="flex flex-wrap gap-4">
                       <a
@@ -320,6 +430,12 @@ export default function Guide() {
                         className="inline-flex items-center px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-all duration-200"
                       >
                         Privacy Policy
+                      </a>
+                      <a
+                        href="/"
+                        className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-green-500 to-teal-500 text-white rounded-lg hover:from-green-600 hover:to-teal-600 transition-all duration-200"
+                      >
+                        Try It Now
                       </a>
                     </div>
                   </div>

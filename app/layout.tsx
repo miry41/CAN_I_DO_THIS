@@ -8,6 +8,10 @@ export const metadata: Metadata = {
   title: "CAN_I_DO_THIS?? - AI Problem Analyzer",
   description:
     "Visualize the knowledge needed to solve any problem with AI-powered analysis",
+  icons: {
+    icon: "/favicon.ico",
+    shortcut: "/favicon.ico",
+  },
   openGraph: {
     title: "CAN_I_DO_THIS?? - AI Problem Analyzer",
     description:

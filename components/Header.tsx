@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { Brain, Menu, X } from "lucide-react";
+import Image from "next/image";
+import { Menu, X } from "lucide-react";
 import { useState } from "react";
 
 export default function Header() {
@@ -19,9 +20,13 @@ export default function Header() {
     <header className="glass-effect border-b border-white/20 px-4 py-3 flex-shrink-0 z-50 shadow-lg">
       <div className="max-w-6xl mx-auto flex items-center justify-between">
         <Link href="/" className="flex items-center space-x-3">
-          <div className="flex items-center justify-center w-12 h-12 bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 rounded-2xl shadow-lg floating-animation">
-            <Brain className="w-7 h-7 text-white" />
-          </div>
+          <Image
+            src="/icon.png"
+            alt="CAN_I_DO_THIS logo"
+            width={48}
+            height={48}
+            className="rounded-2xl shadow-lg floating-animation"
+          />
           <div>
             <h1 className="text-xl md:text-2xl font-bold gradient-text">
               CAN_I_DO_THIS??
@@ -33,39 +38,84 @@ export default function Header() {
         </Link>
 
         {/* Desktop Navigation */}
-        <nav className="hidden md:flex items-center space-x-6">
-          <Link
-            href="/guide"
-            className="text-gray-700 hover:text-gray-900 font-medium transition-colors duration-200"
-          >
-            Guide
-          </Link>
-          <Link
-            href="/contact"
-            className="text-gray-700 hover:text-gray-900 font-medium transition-colors duration-200"
-          >
-            Contact
-          </Link>
-          <Link
-            href="/privacy"
-            className="text-gray-700 hover:text-gray-900 font-medium transition-colors duration-200"
-          >
-            Privacy
-          </Link>
-        </nav>
+        <div className="hidden md:flex items-center space-x-6">
+          <nav className="flex items-center space-x-6">
+            <Link
+              href="/guide"
+              className="text-gray-700 hover:text-gray-900 font-medium transition-colors duration-200"
+            >
+              Guide
+            </Link>
+            <Link
+              href="/contact"
+              className="text-gray-700 hover:text-gray-900 font-medium transition-colors duration-200"
+            >
+              Contact
+            </Link>
+            <Link
+              href="/privacy"
+              className="text-gray-700 hover:text-gray-900 font-medium transition-colors duration-200"
+            >
+              Privacy
+            </Link>
+          </nav>
 
-        {/* Mobile Menu Button */}
-        <button
-          onClick={toggleMenu}
-          className="md:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors duration-200"
-          aria-label="Toggle menu"
-        >
-          {isMenuOpen ? (
-            <X className="w-6 h-6 text-gray-700" />
-          ) : (
-            <Menu className="w-6 h-6 text-gray-700" />
-          )}
-        </button>
+          {/* Presented by */}
+          <div className="flex items-center space-x-2">
+            <span className="text-sm text-gray-600 font-medium">
+              presented by
+            </span>
+            <Link
+              href="https://x.com/dionaeatech"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:scale-105 transition-transform duration-200"
+            >
+              <Image
+                src="/deonaea_icon.png"
+                alt="Deonaea (@dionaeatech)"
+                width={48}
+                height={48}
+                className="rounded-[2px] shadow-md hover:shadow-lg transition-shadow duration-200"
+              />
+            </Link>
+          </div>
+        </div>
+
+        {/* Mobile Menu and User Icon */}
+        <div className="md:hidden flex items-center space-x-3">
+          {/* Presented by (mobile) */}
+          <div className="flex items-center space-x-1">
+            <span className="text-xs text-gray-600 font-medium">by</span>
+            <Link
+              href="https://x.com/dionaeatech"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:scale-105 transition-transform duration-200"
+            >
+              <Image
+                src="/deonaea_icon.png"
+                alt="Deonaea (@dionaeatech)"
+                width={36}
+                height={36}
+                className="rounded-[2px] shadow-md"
+              />
+            </Link>
+          </div>
+
+          {/* Mobile Menu Button */}
+          <button
+            onClick={toggleMenu}
+            className="p-2 rounded-lg hover:bg-gray-100 transition-colors duration-200"
+            aria-label="Toggle menu"
+          >
+            {isMenuOpen ? (
+              <X className="w-6 h-6 text-gray-700" />
+            ) : (
+              <Menu className="w-6 h-6 text-gray-700" />
+            )}
+          </button>
+        </div>
       </div>
 
       {/* Mobile Menu Overlay */}

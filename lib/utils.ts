@@ -116,3 +116,37 @@ export function sanitizeJsonData(data: any): any {
   
   return data;
 }
+
+// ファイル拡張子の検証
+export function isValidFileExtension(fileName: string, validMimeTypes: string[]): boolean {
+  if (!fileName) return false;
+  
+  const extension = fileName.toLowerCase().split('.').pop();
+  if (!extension) return false;
+  
+  const extensionToMimeType: { [key: string]: string } = {
+    'jpg': 'image/jpeg',
+    'jpeg': 'image/jpeg',
+    'png': 'image/png',
+    'gif': 'image/gif',
+    'webp': 'image/webp',
+    'txt': 'text/plain',
+    'pdf': 'application/pdf'
+  };
+  
+  const mimeType = extensionToMimeType[extension];
+  return mimeType ? validMimeTypes.includes(mimeType) : false;
+}
+
+// IPアドレスのホワイトリスト検証（必要に応じて）
+export function isValidIP(ip: string): boolean {
+  const ipRegex = /^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
+  const ipv6Regex = /^(?:[0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}$/;
+  
+  return ipRegex.test(ip) || ipv6Regex.test(ip);
+}
+
+// CSRFトークン検証用（将来的な拡張）
+export function generateCSRFToken(): string {
+  return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+}

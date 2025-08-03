@@ -63,14 +63,28 @@ export default function FileInput({ onAnalyze }: FileInputProps) {
     setDragActive(false);
 
     const files = e.dataTransfer.files;
-    if (files && files[0] && isValidFileType(files[0])) {
+    if (
+      files &&
+      files[0] &&
+      isValidFileType(files[0]) &&
+      isValidFileSize(files[0])
+    ) {
       setFile(files[0]);
+    } else if (files && files[0] && !isValidFileSize(files[0])) {
+      alert(
+        "ファイルサイズが大きすぎます。10MB以下のファイルを選択してください。"
+      );
     }
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
-    if (files && files[0] && isValidFileType(files[0])) {
+    if (
+      files &&
+      files[0] &&
+      isValidFileType(files[0]) &&
+      isValidFileSize(files[0])
+    ) {
       setFile(files[0]);
     }
   };
@@ -85,6 +99,17 @@ export default function FileInput({ onAnalyze }: FileInputProps) {
       "application/pdf",
     ];
     return validTypes.includes(file.type);
+  };
+
+  const isValidFileSize = (file: File) => {
+    const maxSize = 10 * 1024 * 1024; // 10MB in bytes
+    if (file.size > maxSize) {
+      alert(
+        "ファイルサイズが大きすぎます。10MB以下のファイルを選択してください。"
+      );
+      return false;
+    }
+    return true;
   };
 
   const removeFile = () => {

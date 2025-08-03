@@ -3,6 +3,18 @@ import * as nodemailer from 'nodemailer';
 import { sanitizeInput, validateUrl, strictSanitizeInput } from '@/lib/utils';
 import { checkRateLimit } from '@/lib/rate-limit';
 
+// セキュリティヘッダーを追加する関数
+function addSecurityHeaders(response: NextResponse) {
+  response.headers.set('X-Content-Type-Options', 'nosniff');
+  response.headers.set('X-Frame-Options', 'DENY');
+  response.headers.set('X-XSS-Protection', '1; mode=block');
+  response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin');
+  response.headers.set('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+  response.headers.set('Pragma', 'no-cache');
+  response.headers.set('Expires', '0');
+  return response;
+}
+
 export async function POST(request: NextRequest) {
   try {
     // レート制限チェック
@@ -11,20 +23,22 @@ export async function POST(request: NextRequest) {
                      'unknown';
     
     if (!checkRateLimit(clientIP, 3, 300000)) { // 5分間に3回まで
-      return NextResponse.json(
+      const response = NextResponse.json(
         { error: 'Rate limit exceeded. Please try again later.' },
         { status: 429 }
       );
+      return addSecurityHeaders(response);
     }
     
     const { name, email, subject, message } = await request.json();
 
     // バリデーション
     if (!name || !email || !subject || !message) {
-      return NextResponse.json(
+      const response = NextResponse.json(
         { error: 'All fields are required' },
         { status: 400 }
       );
+      return addSecurityHeaders(response);
     }
 
     // 厳格な入力サニタイゼーション
@@ -34,33 +48,37 @@ export async function POST(request: NextRequest) {
 
     // 追加のバリデーション
     if (sanitizedName.length < 1 || sanitizedName.length > 100) {
-      return NextResponse.json(
+      const response = NextResponse.json(
         { error: 'Name must be between 1 and 100 characters' },
         { status: 400 }
       );
+      return addSecurityHeaders(response);
     }
 
     if (sanitizedSubject.length < 1 || sanitizedSubject.length > 200) {
-      return NextResponse.json(
+      const response = NextResponse.json(
         { error: 'Subject must be between 1 and 200 characters' },
         { status: 400 }
       );
+      return addSecurityHeaders(response);
     }
 
     if (sanitizedMessage.length < 1 || sanitizedMessage.length > 2000) {
-      return NextResponse.json(
+      const response = NextResponse.json(
         { error: 'Message must be between 1 and 2000 characters' },
         { status: 400 }
       );
+      return addSecurityHeaders(response);
     }
 
     // メールアドレスの形式チェック（より厳格）
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     if (!emailRegex.test(email)) {
-      return NextResponse.json(
+      const response = NextResponse.json(
         { error: 'Invalid email format' },
         { status: 400 }
       );
+      return addSecurityHeaders(response);
     }
 
     // 環境変数の確認
@@ -69,10 +87,11 @@ export async function POST(request: NextRequest) {
         EMAIL_USER: process.env.EMAIL_USER ? 'set' : 'missing',
         EMAIL_PASS: process.env.EMAIL_PASS ? 'set' : 'missing'
       });
-      return NextResponse.json(
+      const response = NextResponse.json(
         { error: 'Email configuration is missing. Please check EMAIL_USER and EMAIL_PASS environment variables.' },
         { status: 500 }
       );
+      return addSecurityHeaders(response);
     }
 
     // メール送信の設定
@@ -156,10 +175,11 @@ export async function POST(request: NextRequest) {
       transporter.sendMail(userMailOptions)
     ]);
 
-    return NextResponse.json(
+    const response = NextResponse.json(
       { message: 'Message sent successfully' },
       { status: 200 }
     );
+    return addSecurityHeaders(response);
   } catch (error) {
     console.error('Contact form error:', error);
     
@@ -169,9 +189,10 @@ export async function POST(request: NextRequest) {
       errorMessage = error.message;
     }
     
-    return NextResponse.json(
+    const response = NextResponse.json(
       { error: errorMessage },
       { status: 500 }
     );
+    return addSecurityHeaders(response);
   }
 } 

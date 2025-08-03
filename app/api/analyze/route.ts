@@ -3,6 +3,18 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 import { sanitizeInput, truncateText, strictSanitizeInput, sanitizeJsonData } from '@/lib/utils';
 import { checkRateLimit } from '@/lib/rate-limit';
 
+// セキュリティヘッダーを追加する関数
+function addSecurityHeaders(response: NextResponse) {
+  response.headers.set('X-Content-Type-Options', 'nosniff');
+  response.headers.set('X-Frame-Options', 'DENY');
+  response.headers.set('X-XSS-Protection', '1; mode=block');
+  response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin');
+  response.headers.set('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+  response.headers.set('Pragma', 'no-cache');
+  response.headers.set('Expires', '0');
+  return response;
+}
+
 // 動的レンダリングを強制する
 export const dynamic = 'force-dynamic';
 
@@ -136,19 +148,21 @@ ${inputContent}
       }
     } catch (apiError) {
       console.error('GEMINI API call error:', apiError);
-      return NextResponse.json(
-        { error: 'Failed to call GEMINI API: ' + (apiError as Error).message },
-        { status: 500 }
+      const response = NextResponse.json(
+        { error: 'AI service error. Please try again later.' },
+        { status: 503 }
       );
+      return addSecurityHeaders(response);
     }
     console.log('GEMINI API response received');
     
     if (!response || !response.response) {
       console.error('GEMINI API Error: No response');
-      return NextResponse.json(
-        { error: 'Failed to get response from GEMINI API' },
-        { status: 500 }
+      const response = NextResponse.json(
+        { error: 'AI service temporarily unavailable. Please try again later.' },
+        { status: 503 }
       );
+      return addSecurityHeaders(response);
     }
     
     // GEMINIの応答からJSONを抽出
@@ -158,10 +172,11 @@ ${inputContent}
       console.log('Gemini response text length:', geminiResponse.length);
     } catch (textError) {
       console.error('Error extracting response text:', textError);
-      return NextResponse.json(
-        { error: 'Failed to extract response text from GEMINI API' },
-        { status: 500 }
+      const response = NextResponse.json(
+        { error: 'AI service response error. Please try again later.' },
+        { status: 503 }
       );
+      return addSecurityHeaders(response);
     }
     
     // JSON部分を抽出（```json と ``` で囲まれた部分）
@@ -188,14 +203,16 @@ ${inputContent}
       }
     }
 
-    return NextResponse.json(result);
+    const response = NextResponse.json(result);
+    return addSecurityHeaders(response);
     
   } catch (error) {
     console.error('Analysis error:', error);
-    return NextResponse.json(
+    const response = NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }
     );
+    return addSecurityHeaders(response);
   }
 }
 

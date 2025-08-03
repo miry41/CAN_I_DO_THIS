@@ -26,7 +26,7 @@ export default function Privacy() {
                   </p>
                   <ul className="list-disc pl-6 space-y-2">
                     <li>Text content you submit for analysis</li>
-                    <li>URLs you provide for analysis</li>
+                    <li>Files and images you upload for analysis</li>
                     <li>Usage data and analytics</li>
                     <li>Device and browser information</li>
                     <li>IP address and location data</li>
@@ -62,12 +62,22 @@ export default function Privacy() {
                   </h2>
                   <p className="mb-3">We use the collected information to:</p>
                   <ul className="list-disc pl-6 space-y-2">
-                    <li>Provide AI-powered problem analysis services</li>
+                    <li>
+                      Provide AI-powered problem analysis and knowledge mapping
+                      services
+                    </li>
+                    <li>
+                      Generate interactive knowledge graphs and learning
+                      roadmaps
+                    </li>
+                    <li>
+                      Create structured learning paths with core concepts and
+                      prerequisites
+                    </li>
                     <li>Improve our service and user experience</li>
-                    <li>Generate knowledge graphs and visualizations</li>
                     <li>Ensure service security and prevent abuse</li>
-                    <li>Display personalized advertisements</li>
-                    <li>Analyze user behavior and preferences</li>
+                    <li>Display relevant advertisements</li>
+                    <li>Analyze usage patterns for service optimization</li>
                   </ul>
                 </section>
 
@@ -135,11 +145,13 @@ export default function Privacy() {
                     6. Data Retention
                   </h2>
                   <p>
-                    Analysis results are stored temporarily in your browser
-                    session. We do not permanently store your analysis data on
-                    our servers. However, some data may be retained for
-                    analytics and advertising purposes as described in this
-                    policy.
+                    Analysis results and knowledge maps are stored temporarily
+                    in your browser session storage only. We do not permanently
+                    store your personal analysis data, uploaded files, or
+                    generated knowledge graphs on our servers. However,
+                    anonymized usage analytics may be retained for service
+                    improvement and advertising optimization as described in
+                    this policy.
                   </p>
                 </section>
 
@@ -184,7 +196,7 @@ export default function Privacy() {
                 </section>
 
                 <div className="text-sm text-gray-500 mt-8 pt-6 border-t border-gray-200">
-                  <p>Last updated: August 2025</p>
+                  <p>Last updated: December 2024</p>
                 </div>
               </div>
             </div>
