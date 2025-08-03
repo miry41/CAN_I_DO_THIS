@@ -11,14 +11,63 @@ export default function Home() {
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const router = useRouter();
 
+  const convertFileToBase64 = (file: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+        if (typeof reader.result === "string") {
+          // データURLからbase64部分のみを抽出
+          const base64 = reader.result.split(",")[1];
+          resolve(base64);
+        } else {
+          reject(new Error("Failed to convert file to base64"));
+        }
+      };
+      reader.onerror = (error) => reject(error);
+    });
+  };
+
   const handleAnalyze = async (data: {
     text: string;
-    image: File | null;
-    url: string;
+    image: File | string | null;
   }) => {
     setIsAnalyzing(true);
 
     try {
+      let imageData = null;
+      let fileType = null;
+
+      // 画像データの処理
+      if (data.image) {
+        if (typeof data.image === "string") {
+          try {
+            // FileInputからのJSONデータをパース
+            const parsedImageData = JSON.parse(data.image);
+            imageData = parsedImageData;
+            fileType = "structured";
+          } catch (error) {
+            // パースに失敗した場合は、従来の base64 文字列として扱う
+            imageData = data.image;
+            fileType = "base64";
+          }
+        } else if (data.image instanceof File) {
+          // Fileオブジェクトの場合はbase64に変換
+          try {
+            const base64 = await convertFileToBase64(data.image);
+            imageData = {
+              data: base64,
+              mimeType: data.image.type,
+              name: data.image.name,
+            };
+            fileType = "structured";
+          } catch (error) {
+            console.error("Error converting file to base64:", error);
+            throw new Error("ファイルの変換に失敗しました");
+          }
+        }
+      }
+
       // GEMINI APIを呼び出し
       const response = await fetch("/api/analyze", {
         method: "POST",
@@ -27,8 +76,8 @@ export default function Home() {
         },
         body: JSON.stringify({
           text: data.text,
-          url: data.url,
-          image: data.image ? "image_provided" : null, // 画像データは後で実装
+          image: imageData,
+          fileType: fileType,
         }),
       });
 
@@ -43,8 +92,7 @@ export default function Home() {
         "analysisData",
         JSON.stringify({
           text: data.text,
-          url: data.url,
-          hasImage: !!data.image,
+          hasImage: !!imageData,
           timestamp: Date.now(),
           result: result, // GEMINI APIの結果も保存
         })

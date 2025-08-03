@@ -1,26 +1,29 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { Zap, FileText } from 'lucide-react';
+import { useState } from "react";
+import { Zap, FileText } from "lucide-react";
 
 interface TextInputProps {
-  onAnalyze: (data: { text: string; image: File | null; url: string }) => void;
+  onAnalyze: (data: { text: string; image: File | string | null }) => void;
 }
 
 export default function TextInput({ onAnalyze }: TextInputProps) {
-  const [text, setText] = useState('');
+  const [text, setText] = useState("");
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (text.trim()) {
-      onAnalyze({ text: text.trim(), image: null, url: '' });
+      onAnalyze({ text: text.trim(), image: null });
     }
   };
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       <div>
-        <label htmlFor="text-input" className="block text-sm font-semibold text-gray-800 mb-3">
+        <label
+          htmlFor="text-input"
+          className="block text-sm font-semibold text-gray-800 mb-3"
+        >
           Describe your problem or challenge
         </label>
         <div className="relative">
@@ -41,7 +44,9 @@ export default function TextInput({ onAnalyze }: TextInputProps) {
       </div>
 
       <div className="bg-gradient-to-r from-emerald-50 to-cyan-50 rounded-xl p-5 border border-emerald-200">
-        <h4 className="font-semibold text-emerald-900 mb-3">Tips for better results:</h4>
+        <h4 className="font-semibold text-emerald-900 mb-3">
+          Tips for better results:
+        </h4>
         <ul className="text-sm text-emerald-800 space-y-2 font-medium">
           <li>• Include your current skill level</li>
           <li>• Mention specific technologies or domains</li>
@@ -58,7 +63,7 @@ export default function TextInput({ onAnalyze }: TextInputProps) {
         <Zap className="w-5 h-5" />
         <span>Analyze Problem</span>
       </button>
-      
+
       {!text.trim() && (
         <p className="text-xs text-gray-600 text-center font-medium">
           Please describe your problem to get started

@@ -1,30 +1,26 @@
 "use client";
 
 import { useState } from "react";
-import { Link, Type, Upload } from "lucide-react";
-import UrlInput from "./UrlInput";
+import { Type, Upload } from "lucide-react";
 import TextInput from "./TextInput";
 import FileInput from "./FileInput";
 
 interface InputTabsProps {
-  onAnalyze: (data: { text: string; image: File | null; url: string }) => void;
+  onAnalyze: (data: { text: string; image: File | string | null }) => void;
 }
 
-type TabType = "url" | "text" | "file";
+type TabType = "text" | "file";
 
 export default function InputTabs({ onAnalyze }: InputTabsProps) {
   const [activeTab, setActiveTab] = useState<TabType>("text");
 
   const tabs = [
-    { id: "url" as TabType, label: "URL", icon: Link },
     { id: "text" as TabType, label: "Text", icon: Type },
     { id: "file" as TabType, label: "File", icon: Upload },
   ];
 
   const renderActiveComponent = () => {
     switch (activeTab) {
-      case "url":
-        return <UrlInput onAnalyze={onAnalyze} />;
       case "text":
         return <TextInput onAnalyze={onAnalyze} />;
       case "file":

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { GoogleGenAI } from "@google/genai";
-import { sanitizeInput, validateUrl, truncateText, strictSanitizeInput, sanitizeJsonData } from '@/lib/utils';
+import { GoogleGenerativeAI } from "@google/generative-ai";
+import { sanitizeInput, truncateText, strictSanitizeInput, sanitizeJsonData } from '@/lib/utils';
 import { checkRateLimit } from '@/lib/rate-limit';
 
 // 動的レンダリングを強制する
@@ -22,12 +22,11 @@ export async function POST(request: NextRequest) {
       );
     }
     
-    const { text, image, url } = await request.json();
-    console.log('Request data:', { text, image, url });
+    const { text, image, fileType } = await request.json();
+    console.log('Request data:', { text, hasImage: !!image, fileType });
 
     // 厳格な入力サニタイゼーションとバリデーション
     const sanitizedText = strictSanitizeInput(text || '');
-    const sanitizedUrl = url ? strictSanitizeInput(url) : '';
 
     // テキスト長の制限
     if (sanitizedText.length > 5000) {
@@ -37,13 +36,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // URLの検証
-    if (sanitizedUrl && !validateUrl(sanitizedUrl)) {
-      return NextResponse.json(
-        { error: 'Invalid URL format' },
-        { status: 400 }
-      );
-    }
+
     
     // GEMINI APIキーを環境変数から取得
     const apiKey = process.env.GEMINI_API_KEY;
@@ -59,7 +52,6 @@ export async function POST(request: NextRequest) {
     // 入力内容を整理（サニタイズ済み）
     let inputContent = '';
     if (sanitizedText) inputContent += `Text: ${sanitizedText}\n`;
-    if (sanitizedUrl) inputContent += `URL: ${sanitizedUrl}\n`;
     if (image) inputContent += `Image: [Image data provided]\n`;
 
     // GEMINI APIに送信するプロンプト（サニタイズ済み）
@@ -98,18 +90,61 @@ ${inputContent}
 
     // GEMINI APIを呼び出し
     console.log('Calling GEMINI API...');
+    console.log('Has image:', !!image, 'FileType:', fileType);
     
-    const ai = new GoogleGenAI({ apiKey });
-    const model = ai.models.generateContent({
-      model: "gemini-1.5-pro",
-      contents: prompt,
-    });
+    const genAI = new GoogleGenerativeAI(apiKey);
+    const model = genAI.getGenerativeModel({ model: "gemini-1.5-pro" });
     
-    const response = await model;
+    let response;
+    
+    try {
+      
+      if (image) {
+        let imagePart;
+        
+        if (fileType === 'structured' && typeof image === 'object') {
+          // 構造化されたファイルデータの場合
+          console.log('Processing structured image data, mimeType:', image.mimeType);
+          imagePart = {
+            inlineData: {
+              data: image.data,
+              mimeType: image.mimeType || "image/jpeg",
+            },
+          };
+        } else if (fileType === 'base64' && typeof image === 'string') {
+          // 従来のbase64文字列の場合
+          console.log('Processing base64 string data');
+          imagePart = {
+            inlineData: {
+              data: image,
+              mimeType: "image/jpeg", // デフォルト
+            },
+          };
+        }
+        
+        if (imagePart) {
+          console.log('Sending multimodal request');
+          response = await model.generateContent([prompt, imagePart]);
+        } else {
+          console.log('No valid image part, sending text only');
+          response = await model.generateContent(prompt);
+        }
+      } else {
+        // テキストのみの場合
+        console.log('Sending text-only request');
+        response = await model.generateContent(prompt);
+      }
+    } catch (apiError) {
+      console.error('GEMINI API call error:', apiError);
+      return NextResponse.json(
+        { error: 'Failed to call GEMINI API: ' + (apiError as Error).message },
+        { status: 500 }
+      );
+    }
     console.log('GEMINI API response received');
     
-    if (!response || !response.text) {
-      console.error('GEMINI API Error: No response or text');
+    if (!response || !response.response) {
+      console.error('GEMINI API Error: No response');
       return NextResponse.json(
         { error: 'Failed to get response from GEMINI API' },
         { status: 500 }
@@ -117,7 +152,17 @@ ${inputContent}
     }
     
     // GEMINIの応答からJSONを抽出
-    const geminiResponse = response.text;
+    let geminiResponse;
+    try {
+      geminiResponse = response.response.text();
+      console.log('Gemini response text length:', geminiResponse.length);
+    } catch (textError) {
+      console.error('Error extracting response text:', textError);
+      return NextResponse.json(
+        { error: 'Failed to extract response text from GEMINI API' },
+        { status: 500 }
+      );
+    }
     
     // JSON部分を抽出（```json と ``` で囲まれた部分）
     const jsonMatch = geminiResponse.match(/```json\s*([\s\S]*?)\s*```/);

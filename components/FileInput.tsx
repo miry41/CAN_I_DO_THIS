@@ -1,21 +1,50 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { Upload, Zap, Image, FileText, X } from 'lucide-react';
+import { useState } from "react";
+import { Upload, Zap, Image, FileText, X } from "lucide-react";
 
 interface FileInputProps {
-  onAnalyze: (data: { text: string; image: File | null; url: string }) => void;
+  onAnalyze: (data: { text: string; image: File | string | null }) => void;
 }
 
 export default function FileInput({ onAnalyze }: FileInputProps) {
   const [file, setFile] = useState<File | null>(null);
   const [dragActive, setDragActive] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (file) {
-      onAnalyze({ text: '', image: file, url: '' });
+      try {
+        const base64Data = await convertToBase64(file);
+        // ファイルタイプ情報を含めてデータを送信
+        const imageData = {
+          data: base64Data,
+          mimeType: file.type,
+          name: file.name,
+        };
+        onAnalyze({ text: "", image: JSON.stringify(imageData) });
+      } catch (error) {
+        console.error("Error converting file to base64:", error);
+        alert("ファイルの処理に失敗しました。もう一度お試しください。");
+      }
     }
+  };
+
+  const convertToBase64 = (file: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+        if (typeof reader.result === "string") {
+          // データURLからbase64部分のみを抽出
+          const base64 = reader.result.split(",")[1];
+          resolve(base64);
+        } else {
+          reject(new Error("Failed to convert file to base64"));
+        }
+      };
+      reader.onerror = (error) => reject(error);
+    });
   };
 
   const handleDrag = (e: React.DragEvent) => {
@@ -32,7 +61,7 @@ export default function FileInput({ onAnalyze }: FileInputProps) {
     e.preventDefault();
     e.stopPropagation();
     setDragActive(false);
-    
+
     const files = e.dataTransfer.files;
     if (files && files[0] && isValidFileType(files[0])) {
       setFile(files[0]);
@@ -47,7 +76,14 @@ export default function FileInput({ onAnalyze }: FileInputProps) {
   };
 
   const isValidFileType = (file: File) => {
-    const validTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp', 'text/plain', 'application/pdf'];
+    const validTypes = [
+      "image/jpeg",
+      "image/png",
+      "image/gif",
+      "image/webp",
+      "text/plain",
+      "application/pdf",
+    ];
     return validTypes.includes(file.type);
   };
 
@@ -56,18 +92,18 @@ export default function FileInput({ onAnalyze }: FileInputProps) {
   };
 
   const getFileIcon = (file: File) => {
-    if (file.type.startsWith('image/')) {
+    if (file.type.startsWith("image/")) {
       return <Image className="w-6 h-6 text-blue-500" />;
     }
     return <FileText className="w-6 h-6 text-green-500" />;
   };
 
   const formatFileSize = (bytes: number) => {
-    if (bytes === 0) return '0 Bytes';
+    if (bytes === 0) return "0 Bytes";
     const k = 1024;
-    const sizes = ['Bytes', 'KB', 'MB'];
+    const sizes = ["Bytes", "KB", "MB"];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
   };
 
   return (
@@ -76,13 +112,13 @@ export default function FileInput({ onAnalyze }: FileInputProps) {
         <label className="block text-sm font-semibold text-gray-800 mb-3">
           Upload file to analyze
         </label>
-        
+
         {!file ? (
           <div
             className={`relative border-2 border-dashed rounded-2xl p-10 text-center transition-all duration-300 ${
-              dragActive 
-                ? 'border-indigo-500 bg-indigo-50 shadow-lg' 
-                : 'border-gray-300 hover:border-indigo-400 hover:bg-gray-50'
+              dragActive
+                ? "border-indigo-500 bg-indigo-50 shadow-lg"
+                : "border-gray-300 hover:border-indigo-400 hover:bg-gray-50"
             }`}
             onDragEnter={handleDrag}
             onDragLeave={handleDrag}
@@ -114,7 +150,9 @@ export default function FileInput({ onAnalyze }: FileInputProps) {
                 {getFileIcon(file)}
                 <div>
                   <p className="font-semibold text-gray-900">{file.name}</p>
-                  <p className="text-sm text-gray-600 font-medium">{formatFileSize(file.size)}</p>
+                  <p className="text-sm text-gray-600 font-medium">
+                    {formatFileSize(file.size)}
+                  </p>
                 </div>
               </div>
               <button
@@ -130,11 +168,21 @@ export default function FileInput({ onAnalyze }: FileInputProps) {
       </div>
 
       <div className="bg-gradient-to-r from-purple-50 to-pink-50 rounded-xl p-5 border border-purple-200">
-        <h4 className="font-semibold text-purple-900 mb-3">Supported file types:</h4>
+        <h4 className="font-semibold text-purple-900 mb-3">
+          Supported file types:
+        </h4>
         <ul className="text-sm text-purple-800 space-y-2 font-medium">
-          <li>• <strong>Images:</strong> Screenshots, diagrams, charts, handwritten notes</li>
-          <li>• <strong>Text files:</strong> Code snippets, requirements, documentation</li>
-          <li>• <strong>PDFs:</strong> Research papers, tutorials, specifications</li>
+          <li>
+            • <strong>Images:</strong> Screenshots, diagrams, charts,
+            handwritten notes
+          </li>
+          <li>
+            • <strong>Text files:</strong> Code snippets, requirements,
+            documentation
+          </li>
+          <li>
+            • <strong>PDFs:</strong> Research papers, tutorials, specifications
+          </li>
         </ul>
       </div>
 
@@ -146,7 +194,7 @@ export default function FileInput({ onAnalyze }: FileInputProps) {
         <Zap className="w-5 h-5" />
         <span>Analyze File</span>
       </button>
-      
+
       {!file && (
         <p className="text-xs text-gray-600 text-center font-medium">
           Please upload a file to analyze
