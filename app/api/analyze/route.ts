@@ -107,7 +107,7 @@ ${inputContent}
     const genAI = new GoogleGenerativeAI(apiKey);
     const model = genAI.getGenerativeModel({ model: "gemini-1.5-pro" });
     
-    let response;
+    let geminiApiResponse;
     
     try {
       
@@ -136,47 +136,48 @@ ${inputContent}
         
         if (imagePart) {
           console.log('Sending multimodal request');
-          response = await model.generateContent([prompt, imagePart]);
+          geminiApiResponse = await model.generateContent([prompt, imagePart]);
         } else {
           console.log('No valid image part, sending text only');
-          response = await model.generateContent(prompt);
+          geminiApiResponse = await model.generateContent(prompt);
         }
       } else {
         // テキストのみの場合
         console.log('Sending text-only request');
-        response = await model.generateContent(prompt);
+        geminiApiResponse = await model.generateContent(prompt);
       }
     } catch (apiError) {
       console.error('GEMINI API call error:', apiError);
-      const response = NextResponse.json(
+      const errorResponse = NextResponse.json(
         { error: 'AI service error. Please try again later.' },
         { status: 503 }
       );
-      return addSecurityHeaders(response);
+      return addSecurityHeaders(errorResponse);
     }
     console.log('GEMINI API response received');
     
-    if (!response || !response.response) {
+    if (!geminiApiResponse || !geminiApiResponse.response) {
       console.error('GEMINI API Error: No response');
-      const response = NextResponse.json(
+      const errorResponse = NextResponse.json(
         { error: 'AI service temporarily unavailable. Please try again later.' },
         { status: 503 }
       );
-      return addSecurityHeaders(response);
+      return addSecurityHeaders(errorResponse);
     }
     
     // GEMINIの応答からJSONを抽出
     let geminiResponse;
     try {
-      geminiResponse = response.response.text();
+      // Google Generative AIライブラリの正しい構造: response.response.text()
+      geminiResponse = geminiApiResponse.response.text();
       console.log('Gemini response text length:', geminiResponse.length);
     } catch (textError) {
       console.error('Error extracting response text:', textError);
-      const response = NextResponse.json(
+      const errorResponse = NextResponse.json(
         { error: 'AI service response error. Please try again later.' },
         { status: 503 }
       );
-      return addSecurityHeaders(response);
+      return addSecurityHeaders(errorResponse);
     }
     
     // JSON部分を抽出（```json と ``` で囲まれた部分）
@@ -203,16 +204,16 @@ ${inputContent}
       }
     }
 
-    const response = NextResponse.json(result);
-    return addSecurityHeaders(response);
+    const finalResponse = NextResponse.json(result);
+    return addSecurityHeaders(finalResponse);
     
   } catch (error) {
     console.error('Analysis error:', error);
-    const response = NextResponse.json(
+    const errorResponse = NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }
     );
-    return addSecurityHeaders(response);
+    return addSecurityHeaders(errorResponse);
   }
 }
 
