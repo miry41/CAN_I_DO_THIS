@@ -34,3 +34,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# セキュリティ設計書（公開しない）
+SECURITY.md
