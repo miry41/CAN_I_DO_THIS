@@ -68,7 +68,7 @@ export default function ShareButtons() {
   };
 
   return (
-    <div className="glass-effect rounded-2xl p-8 shadow-lg border border-white/20 card-hover">
+    <div className="natural-card rounded-2xl p-8 card-hover">
       <h3 className="text-xl font-bold gradient-text mb-6 flex items-center">
         <Share2 className="w-6 h-6 mr-3" />
         Share This Analysis
@@ -77,7 +77,7 @@ export default function ShareButtons() {
       <div className="grid grid-cols-3 gap-4">
         <button
           onClick={handleNativeShare}
-          className="flex items-center justify-center space-x-2 bg-gradient-to-r from-blue-500 to-indigo-600 text-white px-4 py-4 rounded-xl hover:shadow-lg transition-all duration-300 transform hover:scale-105 font-medium"
+          className="flex items-center justify-center space-x-2 bg-gradient-to-r from-wisteria-500 to-wisteria-600 text-white px-4 py-4 rounded-xl hover:shadow-lg transition-all duration-300 transform hover:scale-105 font-medium"
         >
           <Share2 className="w-4 h-4" />
           <span className="text-sm font-medium">Share</span>
@@ -85,7 +85,7 @@ export default function ShareButtons() {
 
         <button
           onClick={handleTwitterShare}
-          className="flex items-center justify-center space-x-2 bg-gradient-to-r from-gray-800 to-black text-white px-4 py-4 rounded-xl hover:shadow-lg transition-all duration-300 transform hover:scale-105 font-medium"
+          className="flex items-center justify-center space-x-2 bg-gradient-to-r from-wisteria-700 to-wisteria-800 text-white px-4 py-4 rounded-xl hover:shadow-lg transition-all duration-300 transform hover:scale-105 font-medium"
         >
           <Twitter className="w-4 h-4" />
           <span className="text-sm font-medium">X</span>
@@ -93,14 +93,14 @@ export default function ShareButtons() {
 
         <button
           onClick={handleLineShare}
-          className="flex items-center justify-center space-x-2 bg-gradient-to-r from-green-500 to-emerald-600 text-white px-4 py-4 rounded-xl hover:shadow-lg transition-all duration-300 transform hover:scale-105 font-medium"
+          className="flex items-center justify-center space-x-2 bg-gradient-to-r from-wisteria-400 to-wisteria-500 text-white px-4 py-4 rounded-xl hover:shadow-lg transition-all duration-300 transform hover:scale-105 font-medium"
         >
           <MessageSquare className="w-4 h-4" />
           <span className="text-sm font-medium">LINE</span>
         </button>
       </div>
 
-      <p className="text-sm text-gray-600 mt-6 text-center font-medium">
+      <p className="text-sm text-wisteria-600 mt-6 text-center font-medium">
         Share your analysis to help others tackle similar challenges
       </p>
     </div>

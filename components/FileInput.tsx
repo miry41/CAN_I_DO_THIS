@@ -83,9 +83,9 @@ export default function FileInput({ onAnalyze }: InputFormProps) {
 
   const getFileIcon = (file: File) => {
     if (file.type.startsWith("image/")) {
-      return <ImageIcon className="w-6 h-6 text-blue-500" />;
+      return <ImageIcon className="w-6 h-6 text-wisteria-500" />;
     }
-    return <FileText className="w-6 h-6 text-green-500" />;
+    return <FileText className="w-6 h-6 text-wisteria-600" />;
   };
 
   const formatFileSize = (bytes: number) => {
@@ -99,7 +99,7 @@ export default function FileInput({ onAnalyze }: InputFormProps) {
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       <div>
-        <label className="block text-sm font-semibold text-gray-800 mb-3">
+        <label className="block text-sm font-semibold text-wisteria-800 mb-3">
           Upload file to analyze
         </label>
 
@@ -107,8 +107,8 @@ export default function FileInput({ onAnalyze }: InputFormProps) {
           <div
             className={`relative border-2 border-dashed rounded-2xl p-10 text-center transition-all duration-300 ${
               dragActive
-                ? "border-indigo-500 bg-indigo-50 shadow-lg"
-                : "border-gray-300 hover:border-indigo-400 hover:bg-gray-50"
+                ? "border-wisteria-500 bg-wisteria-50 shadow-lg"
+                : "border-wisteria-300 hover:border-wisteria-400 hover:bg-wisteria-50"
             }`}
             onDragEnter={handleDrag}
             onDragLeave={handleDrag}
@@ -122,25 +122,25 @@ export default function FileInput({ onAnalyze }: InputFormProps) {
               className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
             />
             <div className="space-y-4">
-              <Upload className="w-16 h-16 text-indigo-400 mx-auto floating-animation" />
+              <Upload className="w-16 h-16 text-wisteria-400 mx-auto floating-animation" />
               <div>
-                <p className="text-lg font-semibold text-gray-800 mb-2">
+                <p className="text-lg font-semibold text-wisteria-800 mb-2">
                   Drop your file here, or click to select
                 </p>
-                <p className="text-sm text-gray-600 font-medium">
+                <p className="text-sm text-wisteria-600 font-medium">
                   Supports images, text files, and PDFs (max 10MB)
                 </p>
               </div>
             </div>
           </div>
         ) : (
-          <div className="bg-gradient-to-r from-gray-50 to-blue-50 rounded-xl p-5 border border-gray-200">
+          <div className="bg-gradient-to-r from-wisteria-50 to-wisteria-100 rounded-xl p-5 border border-wisteria-200">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-3">
                 {getFileIcon(file)}
                 <div>
-                  <p className="font-semibold text-gray-900">{file.name}</p>
-                  <p className="text-sm text-gray-600 font-medium">
+                  <p className="font-semibold text-wisteria-900">{file.name}</p>
+                  <p className="text-sm text-wisteria-600 font-medium">
                     {formatFileSize(file.size)}
                   </p>
                 </div>
@@ -148,20 +148,20 @@ export default function FileInput({ onAnalyze }: InputFormProps) {
               <button
                 type="button"
                 onClick={removeFile}
-                className="p-2 hover:bg-red-100 rounded-full transition-colors"
+                className="p-2 hover:bg-wisteria-100 rounded-full transition-colors"
               >
-                <X className="w-4 h-4 text-red-500" />
+                <X className="w-4 h-4 text-wisteria-500" />
               </button>
             </div>
           </div>
         )}
       </div>
 
-      <div className="bg-gradient-to-r from-purple-50 to-pink-50 rounded-xl p-5 border border-purple-200">
-        <h4 className="font-semibold text-purple-900 mb-3">
+      <div className="bg-gradient-to-r from-wisteria-50 to-wisteria-100 rounded-xl p-5 border border-wisteria-200">
+        <h4 className="font-semibold text-wisteria-900 mb-3">
           Supported file types:
         </h4>
-        <ul className="text-sm text-purple-800 space-y-2 font-medium">
+        <ul className="text-sm text-wisteria-800 space-y-2 font-medium">
           <li>
             • <strong>Images:</strong> Screenshots, diagrams, charts,
             handwritten notes
@@ -179,20 +179,20 @@ export default function FileInput({ onAnalyze }: InputFormProps) {
       <button
         type="submit"
         disabled={!file || isConverting}
-        className="w-full bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white py-4 px-6 rounded-xl font-semibold text-lg flex items-center justify-center space-x-2 hover:shadow-2xl hover:shadow-purple-500/25 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] glow-effect"
+        className="w-full bg-gradient-to-r from-wisteria-500 via-wisteria-600 to-wisteria-700 text-white py-4 px-6 rounded-xl font-semibold text-lg flex items-center justify-center space-x-2 hover:shadow-2xl hover:shadow-wisteria-500/25 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] glow-effect"
       >
         <Zap className="w-5 h-5" />
         <span>{isConverting ? "Converting..." : "Analyze File"}</span>
       </button>
 
       {!file && (
-        <p className="text-xs text-gray-600 text-center font-medium">
+        <p className="text-xs text-wisteria-600 text-center font-medium">
           Please upload a file to analyze
         </p>
       )}
 
       {conversionError && (
-        <p className="text-xs text-red-600 text-center font-medium">
+        <p className="text-xs text-wisteria-700 text-center font-medium">
           {conversionError}
         </p>
       )}

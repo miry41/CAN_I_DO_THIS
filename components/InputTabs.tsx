@@ -26,9 +26,9 @@ export default function InputTabs({ onAnalyze }: InputFormProps) {
   };
 
   return (
-    <div className="glass-effect rounded-2xl shadow-lg overflow-hidden group">
+    <div className="natural-card rounded-2xl overflow-hidden group">
       {/* Tab Navigation */}
-      <div className="flex p-1.5 bg-white/20">
+      <div className="flex p-1.5 bg-wisteria-100/30">
         {tabs.map((tab) => {
           const Icon = tab.icon;
           return (
@@ -37,8 +37,8 @@ export default function InputTabs({ onAnalyze }: InputFormProps) {
               onClick={() => setActiveTab(tab.id)}
               className={`flex-1 flex items-center justify-center space-x-2 py-3 px-4 rounded-lg font-medium text-sm transition-all duration-200 ${
                 activeTab === tab.id
-                  ? "bg-gradient-to-r from-indigo-500 to-purple-600 text-white shadow-lg glow-effect"
-                  : "text-gray-700 hover:text-gray-900 hover:bg-white/50"
+                  ? "bg-gradient-to-r from-wisteria-500 to-wisteria-600 text-white shadow-lg glow-effect"
+                  : "text-wisteria-700 hover:text-wisteria-900 hover:bg-white/50"
               }`}
             >
               <Icon className="w-4 h-4" />
@@ -49,7 +49,7 @@ export default function InputTabs({ onAnalyze }: InputFormProps) {
       </div>
 
       {/* Divider */}
-      <div className="border-2 border-dashed border-gray-300 group-hover:border-indigo-400 transition-all duration-300"></div>
+      <div className="border-2 border-dashed border-wisteria-300 group-hover:border-wisteria-400 transition-all duration-300"></div>
 
       {/* Active Component */}
       <div className="min-h-[400px] p-6">{renderActiveComponent()}</div>

@@ -130,10 +130,10 @@ function ResultContent() {
         <MobileLayout>
           <MobileContainer maxWidth="max-w-4xl" className="space-y-6">
             <div className="text-center">
-              <h2 className="text-3xl md:text-4xl font-bold text-white mb-4 drop-shadow-lg">
+              <h2 className="text-3xl md:text-4xl font-bold text-wisteria-900 mb-4 drop-shadow-lg">
                 Analysis Complete!
               </h2>
-              <p className="text-white/90 text-base md:text-lg font-medium drop-shadow-md">
+              <p className="text-wisteria-700 text-base md:text-lg font-medium drop-shadow-md">
                 Here&apos;s your knowledge roadmap
               </p>
             </div>

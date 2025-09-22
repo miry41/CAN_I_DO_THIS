@@ -29,8 +29,8 @@ function HomeContent() {
       <main className="flex-1 overflow-hidden flex flex-col">
         <MobileLayout>
           <MobileContainer>
-            <div className="text-center bg-white rounded-2xl">
-              <h3 className="truncate text-xl sm:text-2xl md:text-3xl font-bold text-gray-900 mb-3">
+            <div className="text-center natural-card rounded-2xl p-6 mb-6">
+              <h3 className="truncate text-xl sm:text-2xl md:text-3xl font-bold text-wisteria-900 mb-3">
                 What problem do you want to solve?
               </h3>
             </div>

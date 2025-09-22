@@ -20,6 +20,18 @@ const config: Config = {
         sm: 'calc(var(--radius) - 4px)',
       },
       colors: {
+        wisteria: {
+          '50': 'hsl(var(--wisteria-50))',
+          '100': 'hsl(var(--wisteria-100))',
+          '200': 'hsl(var(--wisteria-200))',
+          '300': 'hsl(var(--wisteria-300))',
+          '400': 'hsl(var(--wisteria-400))',
+          '500': 'hsl(var(--wisteria-500))',
+          '600': 'hsl(var(--wisteria-600))',
+          '700': 'hsl(var(--wisteria-700))',
+          '800': 'hsl(var(--wisteria-800))',
+          '900': 'hsl(var(--wisteria-900))',
+        },
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',
         card: {

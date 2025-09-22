@@ -20,17 +20,17 @@ export default function MobileMenu({
       />
 
       {/* Menu Panel */}
-      <div className="fixed top-0 right-0 h-full w-64 bg-white shadow-2xl z-50 transform transition-transform duration-300 ease-in-out border-l border-gray-200">
+      <div className="fixed top-0 right-0 h-full w-64 bg-white shadow-2xl z-50 transform transition-transform duration-300 ease-in-out border-l border-wisteria-200">
         <div className="flex flex-col h-full">
           {/* Header */}
-          <div className="flex items-center justify-between p-4 border-b border-gray-200 bg-gray-50">
-            <h2 className="text-lg font-semibold text-gray-900">Menu</h2>
+          <div className="flex items-center justify-between p-4 border-b border-wisteria-200 bg-wisteria-50">
+            <h2 className="text-lg font-semibold text-wisteria-900">Menu</h2>
             <button
               onClick={onClose}
-              className="p-2 rounded-lg hover:bg-gray-200 transition-colors duration-200"
+              className="p-2 rounded-lg hover:bg-wisteria-200 transition-colors duration-200"
               aria-label="Close menu"
             >
-              <X className="w-5 h-5 text-gray-700" />
+              <X className="w-5 h-5 text-wisteria-700" />
             </button>
           </div>
 
@@ -40,7 +40,7 @@ export default function MobileMenu({
               <Link
                 href="/guide"
                 onClick={onClose}
-                className="flex items-center px-4 py-3 text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors duration-200"
+                className="flex items-center px-4 py-3 text-wisteria-700 hover:text-wisteria-900 hover:bg-wisteria-100 rounded-lg transition-colors duration-200"
               >
                 <svg
                   className="w-5 h-5 mr-3"
@@ -60,7 +60,7 @@ export default function MobileMenu({
               <Link
                 href="/contact"
                 onClick={onClose}
-                className="flex items-center px-4 py-3 text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors duration-200"
+                className="flex items-center px-4 py-3 text-wisteria-700 hover:text-wisteria-900 hover:bg-wisteria-100 rounded-lg transition-colors duration-200"
               >
                 <svg
                   className="w-5 h-5 mr-3"
@@ -80,7 +80,7 @@ export default function MobileMenu({
               <Link
                 href="/privacy"
                 onClick={onClose}
-                className="flex items-center px-4 py-3 text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors duration-200"
+                className="flex items-center px-4 py-3 text-wisteria-700 hover:text-wisteria-900 hover:bg-wisteria-100 rounded-lg transition-colors duration-200"
               >
                 <svg
                   className="w-5 h-5 mr-3"
@@ -101,8 +101,8 @@ export default function MobileMenu({
           </nav>
 
           {/* Footer */}
-          <div className="p-4 border-t border-gray-200 bg-gray-50">
-            <div className="text-xs text-gray-500 text-center">
+          <div className="p-4 border-t border-wisteria-200 bg-wisteria-50">
+            <div className="text-xs text-wisteria-500 text-center">
               <p>CAN_I_DO_THIS??</p>
               <p>AI-powered problem analyzer</p>
             </div>

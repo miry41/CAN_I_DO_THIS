@@ -12,13 +12,13 @@ export default function Privacy() {
         <MobileLayout>
           <MobileContainer maxWidth="max-w-4xl">
             <MobileCard className="p-8">
-              <h1 className="text-3xl font-bold text-gray-900 mb-6">
+              <h1 className="text-3xl font-bold text-wisteria-900 mb-6">
                 Privacy Policy
               </h1>
 
-              <div className="space-y-6 text-gray-700">
+              <div className="space-y-6 text-wisteria-700">
                 <section>
-                  <h2 className="text-xl font-semibold text-gray-900 mb-3">
+                  <h2 className="text-xl font-semibold text-wisteria-900 mb-3">
                     1. Information We Collect
                   </h2>
                   <p className="mb-3">
@@ -36,7 +36,7 @@ export default function Privacy() {
                 </section>
 
                 <section>
-                  <h2 className="text-xl font-semibold text-gray-900 mb-3">
+                  <h2 className="text-xl font-semibold text-wisteria-900 mb-3">
                     2. Cookies and Similar Technologies
                   </h2>
                   <p className="mb-3">
@@ -58,7 +58,7 @@ export default function Privacy() {
                 </section>
 
                 <section>
-                  <h2 className="text-xl font-semibold text-gray-900 mb-3">
+                  <h2 className="text-xl font-semibold text-wisteria-900 mb-3">
                     3. How We Use Your Information
                   </h2>
                   <p className="mb-3">We use the collected information to:</p>
@@ -83,7 +83,7 @@ export default function Privacy() {
                 </section>
 
                 <section>
-                  <h2 className="text-xl font-semibold text-gray-900 mb-3">
+                  <h2 className="text-xl font-semibold text-wisteria-900 mb-3">
                     4. Third-Party Services and Advertising
                   </h2>
                   <p className="mb-3">
@@ -100,7 +100,7 @@ export default function Privacy() {
                       Google uses your data by visiting{" "}
                       <a
                         href="https://policies.google.com/privacy"
-                        className="text-blue-600 hover:underline"
+                        className="text-wisteria-600 hover:underline"
                         target="_blank"
                         rel="noopener noreferrer"
                       >
@@ -113,7 +113,7 @@ export default function Privacy() {
                       for analysis processing. Please refer to{" "}
                       <a
                         href="https://policies.google.com/privacy"
-                        className="text-blue-600 hover:underline"
+                        className="text-wisteria-600 hover:underline"
                         target="_blank"
                         rel="noopener noreferrer"
                       >
@@ -130,7 +130,7 @@ export default function Privacy() {
                 </section>
 
                 <section>
-                  <h2 className="text-xl font-semibold text-gray-900 mb-3">
+                  <h2 className="text-xl font-semibold text-wisteria-900 mb-3">
                     5. Data Security
                   </h2>
                   <p>
@@ -142,7 +142,7 @@ export default function Privacy() {
                 </section>
 
                 <section>
-                  <h2 className="text-xl font-semibold text-gray-900 mb-3">
+                  <h2 className="text-xl font-semibold text-wisteria-900 mb-3">
                     6. Data Retention
                   </h2>
                   <p>
@@ -157,7 +157,7 @@ export default function Privacy() {
                 </section>
 
                 <section>
-                  <h2 className="text-xl font-semibold text-gray-900 mb-3">
+                  <h2 className="text-xl font-semibold text-wisteria-900 mb-3">
                     7. Your Rights
                   </h2>
                   <p>
@@ -166,7 +166,7 @@ export default function Privacy() {
                     advertising by visiting the{" "}
                     <a
                       href="https://adssettings.google.com/"
-                      className="text-blue-600 hover:underline"
+                      className="text-wisteria-600 hover:underline"
                       target="_blank"
                       rel="noopener noreferrer"
                     >
@@ -177,7 +177,7 @@ export default function Privacy() {
                 </section>
 
                 <section>
-                  <h2 className="text-xl font-semibold text-gray-900 mb-3">
+                  <h2 className="text-xl font-semibold text-wisteria-900 mb-3">
                     8. Changes to This Policy
                   </h2>
                   <p>
@@ -187,7 +187,7 @@ export default function Privacy() {
                 </section>
 
                 <section>
-                  <h2 className="text-xl font-semibold text-gray-900 mb-3">
+                  <h2 className="text-xl font-semibold text-wisteria-900 mb-3">
                     9. Contact Us
                   </h2>
                   <p>
@@ -196,7 +196,7 @@ export default function Privacy() {
                   </p>
                 </section>
 
-                <div className="text-sm text-gray-500 mt-8 pt-6 border-t border-gray-200">
+                <div className="text-sm text-wisteria-500 mt-8 pt-6 border-t border-wisteria-200">
                   <p>Last updated: December 2024</p>
                 </div>
               </div>

@@ -18,7 +18,7 @@ export default function Header() {
   };
 
   return (
-    <header className="glass-effect border-b border-white/20 px-4 py-3 flex-shrink-0 z-50 shadow-lg">
+    <header className="glass-effect border-b border-wisteria-200/30 px-4 py-3 flex-shrink-0 z-50 soft-shadow">
       <div className="max-w-6xl mx-auto flex items-center justify-between">
         <Link href="/" className="flex items-center space-x-3">
           <Image
@@ -32,7 +32,7 @@ export default function Header() {
             <h1 className="text-xl md:text-2xl font-bold gradient-text">
               CAN_I_DO_THIS??
             </h1>
-            <p className="text-xs md:text-sm text-gray-700 leading-tight font-medium">
+            <p className="text-xs md:text-sm text-wisteria-700 leading-tight font-medium">
               AI-powered problem analyzer
             </p>
           </div>
@@ -43,19 +43,19 @@ export default function Header() {
           <nav className="flex items-center space-x-6">
             <Link
               href="/guide"
-              className="text-gray-700 hover:text-gray-900 font-medium transition-colors duration-200"
+              className="text-wisteria-700 hover:text-wisteria-900 font-medium transition-colors duration-200"
             >
               Guide
             </Link>
             <Link
               href="/contact"
-              className="text-gray-700 hover:text-gray-900 font-medium transition-colors duration-200"
+              className="text-wisteria-700 hover:text-wisteria-900 font-medium transition-colors duration-200"
             >
               Contact
             </Link>
             <Link
               href="/privacy"
-              className="text-gray-700 hover:text-gray-900 font-medium transition-colors duration-200"
+              className="text-wisteria-700 hover:text-wisteria-900 font-medium transition-colors duration-200"
             >
               Privacy
             </Link>
@@ -63,7 +63,7 @@ export default function Header() {
 
           {/* Presented by */}
           <div className="flex items-center space-x-2">
-            <span className="text-sm text-gray-600 font-medium">
+            <span className="text-sm text-wisteria-600 font-medium">
               presented by
             </span>
             <Link

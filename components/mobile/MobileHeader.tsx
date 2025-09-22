@@ -16,7 +16,7 @@ export default function MobileHeader({
     <div className="md:hidden flex items-center space-x-3">
       {/* Presented by (mobile) */}
       <div className="flex items-center space-x-1">
-        <span className="text-xs text-gray-600 font-medium">by</span>
+        <span className="text-xs text-wisteria-600 font-medium">by</span>
         <Link
           href="https://x.com/dionaeatech"
           target="_blank"
@@ -36,10 +36,10 @@ export default function MobileHeader({
       {/* Mobile Menu Button */}
       <button
         onClick={onMenuToggle}
-        className="p-2 rounded-lg hover:bg-gray-100 transition-colors duration-200"
+        className="p-2 rounded-lg hover:bg-wisteria-100 transition-colors duration-200"
         aria-label="Toggle menu"
       >
-        <Menu className="w-6 h-6 text-gray-700" />
+        <Menu className="w-6 h-6 text-wisteria-700" />
       </button>
     </div>
   );
