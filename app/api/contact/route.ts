@@ -177,9 +177,9 @@ export async function POST(request: NextRequest) {
       { status: 200 }
     );
     return addSecurityHeaders(response);
-  } catch (_) {
+  } catch (error) {
     const response = NextResponse.json(
-      { error: errorMessage },
+      { error: 'Internal server error' },
       { status: 500 }
     );
     return addSecurityHeaders(response);

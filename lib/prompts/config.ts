@@ -34,18 +34,18 @@ export const PROMPT_CONFIGS = {
 /**
  * 環境変数から設定を上書き
  */
-export function getPromptConfig(type: keyof typeof PROMPT_CONFIGS) {
+export function getPromptConfig<T extends keyof typeof PROMPT_CONFIGS>(type: T): typeof PROMPT_CONFIGS[T] {
   const baseConfig = PROMPT_CONFIGS[type];
   
   // 環境変数による上書き（必要に応じて）
   if (type === "analysis") {
     return {
       ...baseConfig,
-      model: process.env.GEMINI_MODEL || baseConfig.model,
+      model: process.env.GEMINI_MODEL || (baseConfig as any).model,
       temperature: process.env.GEMINI_TEMPERATURE 
         ? parseFloat(process.env.GEMINI_TEMPERATURE) 
-        : baseConfig.temperature,
-    };
+        : (baseConfig as any).temperature,
+    } as typeof PROMPT_CONFIGS[T];
   }
   
   return baseConfig;
