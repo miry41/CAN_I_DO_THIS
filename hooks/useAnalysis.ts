@@ -66,10 +66,16 @@ export function useAnalysis(): AnalysisHook {
       });
 
       if (!response.ok) {
-        throw new Error("API call failed");
+        const errorData = await response.json();
+        throw new Error(errorData.error || "API call failed");
       }
 
       const result = await response.json();
+
+      // エラーレスポンスかチェック
+      if (result.error) {
+        throw new Error(result.error);
+      }
 
       // 結果をsessionStorageに保存
       sessionStorage.setItem(
@@ -93,6 +99,10 @@ export function useAnalysis(): AnalysisHook {
         : "解析に失敗しました。もう一度お試しください。";
       
       setError(errorMsg);
+      
+      // エラーが発生した場合はルートページに戻る
+      router.push("/");
+      
       throw analysisError;
     }
   }, [router, convertFileToStructured]);

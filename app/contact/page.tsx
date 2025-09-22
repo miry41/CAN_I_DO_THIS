@@ -3,20 +3,27 @@
 import Header from "@/components/Header";
 import BannerAd from "@/components/BannerAd";
 import { MobileLayout, MobileContainer, MobileCard } from "@/components/mobile";
-import { useContactForm } from "@/hooks";
+import { ErrorProvider, useError } from "@/components/providers";
+import { useContactForm, parseApiError } from "@/hooks";
 import { ContactFormData, SubmitStatus } from "@/types";
 
-export default function Contact() {
+function ContactContent() {
   const { formData, isSubmitting, submitStatus, handleChange, submitForm } =
     useContactForm();
+  const { showSuccess, showSimpleError } = useError();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
       await submitForm("/api/contact");
+      showSuccess(
+        "メッセージが正常に送信されました。ありがとうございます！",
+        "送信完了"
+      );
     } catch (error) {
-      // エラーは既にuseContactFormで処理済み
-      console.error("Contact form submission failed:", error);
+      // エラーハンドリングをモーダルに変更
+      const { title, message, details } = parseApiError(error);
+      showSimpleError(message, title);
     }
   };
 
@@ -208,5 +215,13 @@ export default function Contact() {
       </main>
       <BannerAd />
     </div>
+  );
+}
+
+export default function Contact() {
+  return (
+    <ErrorProvider>
+      <ContactContent />
+    </ErrorProvider>
   );
 }

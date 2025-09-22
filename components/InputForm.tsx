@@ -4,10 +4,12 @@ import { useState } from "react";
 import { Upload, Zap } from "lucide-react";
 import { InputFormProps, ValidMimeType } from "@/types";
 import { useDragAndDrop } from "@/hooks";
+import { useError } from "@/components/providers";
 
 export default function InputForm({ onAnalyze }: InputFormProps) {
   const [text, setText] = useState("");
   const [image, setImage] = useState<File | null>(null);
+  const { showWarning } = useError();
 
   const acceptedTypes: ValidMimeType[] = [
     "image/jpeg",
@@ -24,7 +26,7 @@ export default function InputForm({ onAnalyze }: InputFormProps) {
     },
     acceptedTypes,
     onError: (error) => {
-      alert(error);
+      showWarning(error, "ファイルアップロードエラー");
     },
   });
 

@@ -9,9 +9,10 @@ import ShareButtons from "@/components/ShareButtons";
 import BannerAd from "@/components/BannerAd";
 import LoadingOverlay from "@/components/LoadingOverlay";
 import { MobileLayout, MobileContainer } from "@/components/mobile";
+import { ErrorProvider, useError } from "@/components/providers";
 import { AnalysisResult } from "@/types";
 
-export default function ResultPage() {
+function ResultContent() {
   const [isLoading, setIsLoading] = useState(true);
   const [result, setResult] = useState<AnalysisResult | null>(null);
   const router = useRouter();
@@ -145,5 +146,13 @@ export default function ResultPage() {
       </main>
       <BannerAd />
     </div>
+  );
+}
+
+export default function ResultPage() {
+  return (
+    <ErrorProvider>
+      <ResultContent />
+    </ErrorProvider>
   );
 }

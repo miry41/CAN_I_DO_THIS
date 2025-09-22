@@ -36,10 +36,10 @@ export default function ShareButtons() {
       try {
         await navigator.share(shareData);
       } catch (error) {
-        console.log("Share cancelled");
+        // ユーザーがシェアをキャンセルした場合（何もしない）
       }
     } else {
-      console.log("Native share not supported");
+      // ネイティブシェアがサポートされていない場合（何もしない）
     }
   };
 

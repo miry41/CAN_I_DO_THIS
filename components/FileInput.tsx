@@ -3,10 +3,12 @@
 import { useState } from "react";
 import { Upload, Zap, Image as ImageIcon, FileText, X } from "lucide-react";
 import { InputFormProps, ValidMimeType } from "@/types";
-import { useFileConverter, useDragAndDrop } from "@/hooks";
+import { useFileConverter, useDragAndDrop, parseApiError } from "@/hooks";
+import { useError } from "@/components/providers";
 
 export default function FileInput({ onAnalyze }: InputFormProps) {
   const [file, setFile] = useState<File | null>(null);
+  const { showSimpleError, showWarning } = useError();
   const {
     convertFileToStructured,
     isConverting,
@@ -31,7 +33,7 @@ export default function FileInput({ onAnalyze }: InputFormProps) {
     acceptedTypes,
     maxFileSize: 10 * 1024 * 1024, // 10MB
     onError: (error) => {
-      alert(error);
+      showWarning(error, "ファイルアップロードエラー");
     },
   });
 
@@ -43,7 +45,8 @@ export default function FileInput({ onAnalyze }: InputFormProps) {
         onAnalyze({ text: "", image: JSON.stringify(imageData) });
       } catch (error) {
         console.error("Error converting file:", error);
-        alert("ファイルの処理に失敗しました。もう一度お試しください。");
+        const { title, message } = parseApiError(error);
+        showSimpleError(message, title);
       }
     }
   };
@@ -53,17 +56,19 @@ export default function FileInput({ onAnalyze }: InputFormProps) {
     if (files && files[0]) {
       // ファイルタイプとサイズの検証
       if (!acceptedTypes.includes(files[0].type as ValidMimeType)) {
-        alert(
+        showWarning(
           `サポートされていないファイル形式です。許可された形式: ${acceptedTypes.join(
             ", "
-          )}`
+          )}`,
+          "ファイル形式エラー"
         );
         return;
       }
 
       if (files[0].size > 10 * 1024 * 1024) {
-        alert(
-          "ファイルサイズが大きすぎます。10MB以下のファイルを選択してください。"
+        showWarning(
+          "ファイルサイズが大きすぎます。10MB以下のファイルを選択してください。",
+          "ファイルサイズエラー"
         );
         return;
       }

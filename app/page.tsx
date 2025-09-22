@@ -5,18 +5,21 @@ import InputTabs from "@/components/InputTabs";
 import BannerAd from "@/components/BannerAd";
 import LoadingOverlay from "@/components/LoadingOverlay";
 import { MobileLayout, MobileContainer } from "@/components/mobile";
-import { useAnalysis } from "@/hooks";
+import { ErrorProvider, useError } from "@/components/providers";
+import { useAnalysis, parseApiError } from "@/hooks";
 import { AnalyzeData, FileData, AnalyzeApiRequest } from "@/types";
 
-export default function Home() {
+function HomeContent() {
   const { isAnalyzing, analyzeData, error } = useAnalysis();
+  const { showSimpleError } = useError();
 
   const handleAnalyze = async (data: AnalyzeData) => {
     try {
       await analyzeData(data);
     } catch (error) {
-      // エラーハンドリング
-      alert("解析に失敗しました。もう一度お試しください。");
+      // エラーハンドリングをモーダルに変更
+      const { title, message, details } = parseApiError(error);
+      showSimpleError(message, title);
     }
   };
 
@@ -38,5 +41,13 @@ export default function Home() {
       <BannerAd />
       {isAnalyzing && <LoadingOverlay />}
     </div>
+  );
+}
+
+export default function Home() {
+  return (
+    <ErrorProvider>
+      <HomeContent />
+    </ErrorProvider>
   );
 }

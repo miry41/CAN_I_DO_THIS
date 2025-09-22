@@ -3,10 +3,9 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 import { sanitizeInput, truncateText, strictSanitizeInput, sanitizeJsonData } from '@/lib/utils';
 import { checkRateLimit } from '@/lib/rate-limit';
 import { AnalyzeApiRequest, AnalysisResult, PromptInputContent } from '@/types';
-import { 
-  buildAnalysisPrompt, 
-  getFallbackPrompt, 
-  ANALYSIS_PROMPT_CONFIG 
+import {
+  buildAnalysisPrompt,
+  ANALYSIS_PROMPT_CONFIG
 } from '@/lib/prompts';
 
 // セキュリティヘッダーを追加する関数
@@ -26,8 +25,6 @@ export const dynamic = 'force-dynamic';
 
 export async function POST(request: NextRequest) {
   try {
-    console.log('API route called');
-    
     // レート制限チェック
     const clientIP = request.headers.get('x-forwarded-for') || 
                      request.headers.get('x-real-ip') || 
@@ -41,7 +38,6 @@ export async function POST(request: NextRequest) {
     }
     
     const { text, image, fileType }: AnalyzeApiRequest = await request.json();
-    console.log('Request data:', { text, hasImage: !!image, fileType });
 
     // 厳格な入力サニタイゼーションとバリデーション
     const sanitizedText = strictSanitizeInput(text || '');
@@ -89,7 +85,6 @@ export async function POST(request: NextRequest) {
         
         if (fileType === 'structured' && typeof image === 'object') {
           // 構造化されたファイルデータの場合
-          console.log('Processing structured image data, mimeType:', image.mimeType);
           imagePart = {
             inlineData: {
               data: image.data,
@@ -98,7 +93,6 @@ export async function POST(request: NextRequest) {
           };
         } else if (fileType === 'base64' && typeof image === 'string') {
           // 従来のbase64文字列の場合
-          console.log('Processing base64 string data');
           imagePart = {
             inlineData: {
               data: image,
@@ -137,7 +131,6 @@ export async function POST(request: NextRequest) {
     try {
       // Google Generative AIライブラリの正しい構造: response.response.text()
       geminiResponse = geminiApiResponse.response.text();
-      console.log('Gemini response text length:', geminiResponse.length);
     } catch (textError) {
       console.error('Error extracting response text:', textError);
       const errorResponse = NextResponse.json(
@@ -158,7 +151,11 @@ export async function POST(request: NextRequest) {
         result = sanitizeJsonData(parsedResult);
       } catch (e) {
         console.error('Failed to parse JSON from GEMINI response');
-        result = createSafeFallbackResult(sanitizedText);
+        const errorResponse = NextResponse.json(
+          { error: '処理がうまくいきませんでした。もう一度お試しください。' },
+          { status: 500 }
+        );
+        return addSecurityHeaders(errorResponse);
       }
     } else {
       // JSONが見つからない場合は、応答全体をパースしてみる
@@ -166,8 +163,13 @@ export async function POST(request: NextRequest) {
         const parsedResult = JSON.parse(geminiResponse);
         result = sanitizeJsonData(parsedResult);
       } catch (e) {
-        // パースに失敗した場合は、安全なフォールバックデータを返す
-        result = createSafeFallbackResult(sanitizedText);
+        // パースに失敗した場合はエラーレスポンスを返す
+        console.error('Failed to parse GEMINI response as JSON');
+        const errorResponse = NextResponse.json(
+          { error: '処理がうまくいきませんでした。もう一度お試しください。' },
+          { status: 500 }
+        );
+        return addSecurityHeaders(errorResponse);
       }
     }
 
@@ -177,44 +179,9 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error('Analysis error:', error);
     const errorResponse = NextResponse.json(
-      { error: 'Internal server error' },
+      { error: '処理がうまくいきませんでした。もう一度お試しください。' },
       { status: 500 }
     );
     return addSecurityHeaders(errorResponse);
-  }
-}
-
-// 安全なフォールバック結果を生成
-function createSafeFallbackResult(text: string): AnalysisResult {
-  try {
-    // フォールバックプロンプトからJSONを解析して返す
-    const fallbackPromptJson = getFallbackPrompt();
-    return JSON.parse(fallbackPromptJson);
-  } catch (error) {
-    // JSONパースに失敗した場合のハードコードされたフォールバック
-    return {
-      problem: text || "アップロードされたコンテンツの解析",
-      knowledgeMap: {
-        core_concepts: ["問題分析", "リサーチスキル"],
-        prerequisites: ["基本的な分析スキル"],
-        difficulty_level: "中級",
-        estimated_time: "2-4週間",
-        learning_path: [
-          {
-            step: 1,
-            topic: "問題分析",
-            description: "問題の構造を分析する",
-            resources: ["問題解決フレームワーク"]
-          }
-        ]
-      },
-      dependencies: [
-        { 
-          from: "問題分析", 
-          to: "解決策の開発", 
-          relationship: "prerequisite" 
-        }
-      ]
-    };
   }
 } 

@@ -211,6 +211,38 @@ export interface PromptConfig {
 }
 
 // ===========================================
+// エラーハンドリング関連の型定義
+// ===========================================
+
+export type ErrorType = "error" | "warning" | "info" | "success";
+
+export interface ErrorModalData {
+  id: string;
+  type: ErrorType;
+  title: string;
+  message: string;
+  details?: string;
+  timestamp: number;
+  actions?: ErrorAction[];
+}
+
+export interface ErrorAction {
+  label: string;
+  action: () => void;
+  variant?: "primary" | "secondary" | "danger";
+}
+
+export interface ErrorModalHook {
+  errors: ErrorModalData[];
+  showError: (error: Omit<ErrorModalData, "id" | "timestamp">) => void;
+  showSimpleError: (message: string, title?: string) => void;
+  showWarning: (message: string, title?: string) => void;
+  showSuccess: (message: string, title?: string) => void;
+  dismissError: (id: string) => void;
+  clearAllErrors: () => void;
+}
+
+// ===========================================
 // ユーティリティ型定義
 // ===========================================
 
