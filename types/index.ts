@@ -132,6 +132,38 @@ export interface KnowledgeGraphProps {
 }
 
 // ===========================================
+// カスタムフック関連の型定義
+// ===========================================
+
+export interface FileConverterHook {
+  convertToBase64: (file: File) => Promise<string>;
+  convertFileToStructured: (file: File) => Promise<FileData>;
+  isConverting: boolean;
+  error: string | null;
+}
+
+export interface ContactFormHook {
+  formData: ContactFormData;
+  isSubmitting: boolean;
+  submitStatus: SubmitStatus;
+  handleChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void;
+  resetForm: () => void;
+  submitForm: (apiEndpoint: string) => Promise<void>;
+}
+
+export interface AnalysisHook {
+  isAnalyzing: boolean;
+  analyzeData: (data: AnalyzeData) => Promise<void>;
+  error: string | null;
+}
+
+export interface DragAndDropHook {
+  dragActive: boolean;
+  handleDrag: (e: React.DragEvent) => void;
+  handleDrop: (e: React.DragEvent) => void;
+}
+
+// ===========================================
 // セッションストレージ関連の型定義
 // ===========================================
 

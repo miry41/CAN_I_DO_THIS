@@ -1,112 +1,75 @@
 "use client";
 
 import { useState } from "react";
-import { Upload, Zap, Image, FileText, X } from "lucide-react";
-import { InputFormProps } from "@/types";
+import { Upload, Zap, Image as ImageIcon, FileText, X } from "lucide-react";
+import { InputFormProps, ValidMimeType } from "@/types";
+import { useFileConverter, useDragAndDrop } from "@/hooks";
 
 export default function FileInput({ onAnalyze }: InputFormProps) {
   const [file, setFile] = useState<File | null>(null);
-  const [dragActive, setDragActive] = useState(false);
+  const {
+    convertFileToStructured,
+    isConverting,
+    error: conversionError,
+  } = useFileConverter();
+
+  const acceptedTypes: ValidMimeType[] = [
+    "image/jpeg",
+    "image/png",
+    "image/gif",
+    "image/webp",
+    "text/plain",
+    "application/pdf",
+  ];
+
+  const { dragActive, handleDrag, handleDrop } = useDragAndDrop({
+    onDrop: (files) => {
+      if (files[0]) {
+        setFile(files[0]);
+      }
+    },
+    acceptedTypes,
+    maxFileSize: 10 * 1024 * 1024, // 10MB
+    onError: (error) => {
+      alert(error);
+    },
+  });
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (file) {
       try {
-        const base64Data = await convertToBase64(file);
-        // ファイルタイプ情報を含めてデータを送信
-        const imageData = {
-          data: base64Data,
-          mimeType: file.type,
-          name: file.name,
-        };
+        const imageData = await convertFileToStructured(file);
         onAnalyze({ text: "", image: JSON.stringify(imageData) });
       } catch (error) {
-        console.error("Error converting file to base64:", error);
+        console.error("Error converting file:", error);
         alert("ファイルの処理に失敗しました。もう一度お試しください。");
       }
     }
   };
 
-  const convertToBase64 = (file: File): Promise<string> => {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => {
-        if (typeof reader.result === "string") {
-          // データURLからbase64部分のみを抽出
-          const base64 = reader.result.split(",")[1];
-          resolve(base64);
-        } else {
-          reject(new Error("Failed to convert file to base64"));
-        }
-      };
-      reader.onerror = (error) => reject(error);
-    });
-  };
-
-  const handleDrag = (e: React.DragEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    if (e.type === "dragenter" || e.type === "dragover") {
-      setDragActive(true);
-    } else if (e.type === "dragleave") {
-      setDragActive(false);
-    }
-  };
-
-  const handleDrop = (e: React.DragEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setDragActive(false);
-
-    const files = e.dataTransfer.files;
-    if (
-      files &&
-      files[0] &&
-      isValidFileType(files[0]) &&
-      isValidFileSize(files[0])
-    ) {
-      setFile(files[0]);
-    } else if (files && files[0] && !isValidFileSize(files[0])) {
-      alert(
-        "ファイルサイズが大きすぎます。10MB以下のファイルを選択してください。"
-      );
-    }
-  };
-
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
-    if (
-      files &&
-      files[0] &&
-      isValidFileType(files[0]) &&
-      isValidFileSize(files[0])
-    ) {
+    if (files && files[0]) {
+      // ファイルタイプとサイズの検証
+      if (!acceptedTypes.includes(files[0].type as ValidMimeType)) {
+        alert(
+          `サポートされていないファイル形式です。許可された形式: ${acceptedTypes.join(
+            ", "
+          )}`
+        );
+        return;
+      }
+
+      if (files[0].size > 10 * 1024 * 1024) {
+        alert(
+          "ファイルサイズが大きすぎます。10MB以下のファイルを選択してください。"
+        );
+        return;
+      }
+
       setFile(files[0]);
     }
-  };
-
-  const isValidFileType = (file: File) => {
-    const validTypes = [
-      "image/jpeg",
-      "image/png",
-      "image/gif",
-      "image/webp",
-      "text/plain",
-      "application/pdf",
-    ];
-    return validTypes.includes(file.type);
-  };
-
-  const isValidFileSize = (file: File) => {
-    const maxSize = 10 * 1024 * 1024; // 10MB in bytes
-    if (file.size > maxSize) {
-      alert(
-        "ファイルサイズが大きすぎます。10MB以下のファイルを選択してください。"
-      );
-      return false;
-    }
-    return true;
   };
 
   const removeFile = () => {
@@ -115,7 +78,7 @@ export default function FileInput({ onAnalyze }: InputFormProps) {
 
   const getFileIcon = (file: File) => {
     if (file.type.startsWith("image/")) {
-      return <Image className="w-6 h-6 text-blue-500" />;
+      return <ImageIcon className="w-6 h-6 text-blue-500" />;
     }
     return <FileText className="w-6 h-6 text-green-500" />;
   };
@@ -210,16 +173,22 @@ export default function FileInput({ onAnalyze }: InputFormProps) {
 
       <button
         type="submit"
-        disabled={!file}
+        disabled={!file || isConverting}
         className="w-full bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white py-4 px-6 rounded-xl font-semibold text-lg flex items-center justify-center space-x-2 hover:shadow-2xl hover:shadow-purple-500/25 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] glow-effect"
       >
         <Zap className="w-5 h-5" />
-        <span>Analyze File</span>
+        <span>{isConverting ? "Converting..." : "Analyze File"}</span>
       </button>
 
       {!file && (
         <p className="text-xs text-gray-600 text-center font-medium">
           Please upload a file to analyze
+        </p>
+      )}
+
+      {conversionError && (
+        <p className="text-xs text-red-600 text-center font-medium">
+          {conversionError}
         </p>
       )}
     </form>

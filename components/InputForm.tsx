@@ -2,38 +2,36 @@
 
 import { useState } from "react";
 import { Upload, Zap } from "lucide-react";
-import { InputFormProps } from "@/types";
+import { InputFormProps, ValidMimeType } from "@/types";
+import { useDragAndDrop } from "@/hooks";
 
 export default function InputForm({ onAnalyze }: InputFormProps) {
   const [text, setText] = useState("");
   const [image, setImage] = useState<File | null>(null);
-  const [dragActive, setDragActive] = useState(false);
+
+  const acceptedTypes: ValidMimeType[] = [
+    "image/jpeg",
+    "image/png",
+    "image/gif",
+    "image/webp",
+  ];
+
+  const { dragActive, handleDrag, handleDrop } = useDragAndDrop({
+    onDrop: (files) => {
+      if (files[0]) {
+        setImage(files[0]);
+      }
+    },
+    acceptedTypes,
+    onError: (error) => {
+      alert(error);
+    },
+  });
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (text.trim() || image) {
       onAnalyze({ text: text.trim(), image });
-    }
-  };
-
-  const handleDrag = (e: React.DragEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    if (e.type === "dragenter" || e.type === "dragover") {
-      setDragActive(true);
-    } else if (e.type === "dragleave") {
-      setDragActive(false);
-    }
-  };
-
-  const handleDrop = (e: React.DragEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setDragActive(false);
-
-    const files = e.dataTransfer.files;
-    if (files && files[0] && files[0].type.startsWith("image/")) {
-      setImage(files[0]);
     }
   };
 

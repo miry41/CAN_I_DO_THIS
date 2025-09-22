@@ -3,58 +3,21 @@
 import Header from "@/components/Header";
 import BannerAd from "@/components/BannerAd";
 import { MobileLayout, MobileContainer, MobileCard } from "@/components/mobile";
-import { useState } from "react";
+import { useContactForm } from "@/hooks";
 import { ContactFormData, SubmitStatus } from "@/types";
 
 export default function Contact() {
-  const [formData, setFormData] = useState<ContactFormData>({
-    name: "",
-    email: "",
-    subject: "",
-    message: "",
-  });
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitStatus, setSubmitStatus] = useState<SubmitStatus>("idle");
+  const { formData, isSubmitting, submitStatus, handleChange, submitForm } =
+    useContactForm();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsSubmitting(true);
-    setSubmitStatus("idle");
-
     try {
-      const response = await fetch("/api/contact", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        console.error("API Error:", errorData);
-        throw new Error(errorData.error || "Failed to send message");
-      }
-
-      setSubmitStatus("success");
-      setFormData({ name: "", email: "", subject: "", message: "" });
+      await submitForm("/api/contact");
     } catch (error) {
-      console.error("Contact form error:", error);
-      setSubmitStatus("error");
-    } finally {
-      setIsSubmitting(false);
+      // エラーは既にuseContactFormで処理済み
+      console.error("Contact form submission failed:", error);
     }
-  };
-
-  const handleChange = (
-    e: React.ChangeEvent<
-      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-    >
-  ) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
   };
 
   return (
