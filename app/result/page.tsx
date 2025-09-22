@@ -8,27 +8,7 @@ import KnowledgeGraph from "@/components/KnowledgeGraph";
 import ShareButtons from "@/components/ShareButtons";
 import BannerAd from "@/components/BannerAd";
 import LoadingOverlay from "@/components/LoadingOverlay";
-
-interface AnalysisResult {
-  problem: string;
-  knowledgeMap: {
-    core_concepts: string[];
-    prerequisites: string[];
-    difficulty_level: string;
-    estimated_time: string;
-    learning_path: Array<{
-      step: number;
-      topic: string;
-      description: string;
-      resources: string[];
-    }>;
-  };
-  dependencies: Array<{
-    from: string;
-    to: string;
-    relationship: string;
-  }>;
-}
+import { AnalysisResult } from "@/types";
 
 export default function ResultPage() {
   const [isLoading, setIsLoading] = useState(true);

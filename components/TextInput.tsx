@@ -2,12 +2,9 @@
 
 import { useState } from "react";
 import { Zap, FileText } from "lucide-react";
+import { InputFormProps } from "@/types";
 
-interface TextInputProps {
-  onAnalyze: (data: { text: string; image: File | string | null }) => void;
-}
-
-export default function TextInput({ onAnalyze }: TextInputProps) {
+export default function TextInput({ onAnalyze }: InputFormProps) {
   const [text, setText] = useState("");
 
   const handleSubmit = (e: React.FormEvent) => {

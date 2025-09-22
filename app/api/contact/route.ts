@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import * as nodemailer from 'nodemailer';
 import { sanitizeInput, validateUrl, strictSanitizeInput } from '@/lib/utils';
 import { checkRateLimit } from '@/lib/rate-limit';
+import { ContactApiRequest } from '@/types';
 
 // セキュリティヘッダーを追加する関数
 function addSecurityHeaders(response: NextResponse) {
@@ -30,7 +31,7 @@ export async function POST(request: NextRequest) {
       return addSecurityHeaders(response);
     }
     
-    const { name, email, subject, message } = await request.json();
+    const { name, email, subject, message }: ContactApiRequest = await request.json();
 
     // バリデーション
     if (!name || !email || !subject || !message) {
@@ -83,10 +84,6 @@ export async function POST(request: NextRequest) {
 
     // 環境変数の確認
     if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
-      console.error('Missing email configuration:', {
-        EMAIL_USER: process.env.EMAIL_USER ? 'set' : 'missing',
-        EMAIL_PASS: process.env.EMAIL_PASS ? 'set' : 'missing'
-      });
       const response = NextResponse.json(
         { error: 'Email configuration is missing. Please check EMAIL_USER and EMAIL_PASS environment variables.' },
         { status: 500 }
@@ -180,15 +177,7 @@ export async function POST(request: NextRequest) {
       { status: 200 }
     );
     return addSecurityHeaders(response);
-  } catch (error) {
-    console.error('Contact form error:', error);
-    
-    // より詳細なエラー情報を返す
-    let errorMessage = 'Failed to send message';
-    if (error instanceof Error) {
-      errorMessage = error.message;
-    }
-    
+  } catch (_) {
     const response = NextResponse.json(
       { error: errorMessage },
       { status: 500 }

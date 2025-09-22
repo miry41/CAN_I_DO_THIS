@@ -2,12 +2,9 @@
 
 import { useState } from "react";
 import { Upload, Zap, Image, FileText, X } from "lucide-react";
+import { InputFormProps } from "@/types";
 
-interface FileInputProps {
-  onAnalyze: (data: { text: string; image: File | string | null }) => void;
-}
-
-export default function FileInput({ onAnalyze }: FileInputProps) {
+export default function FileInput({ onAnalyze }: InputFormProps) {
   const [file, setFile] = useState<File | null>(null);
   const [dragActive, setDragActive] = useState(false);
 

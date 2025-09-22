@@ -1,9 +1,4 @@
-interface RateLimitStore {
-  [key: string]: {
-    count: number;
-    resetTime: number;
-  };
-}
+import { RateLimitStore, RateLimitInfo } from '@/types';
 
 const store: RateLimitStore = {};
 
@@ -27,7 +22,7 @@ export function checkRateLimit(identifier: string, limit: number = 10, windowMs:
   return true;
 }
 
-export function getRateLimitInfo(identifier: string): { remaining: number; resetTime: number } | null {
+export function getRateLimitInfo(identifier: string): RateLimitInfo | null {
   const key = `rate_limit_${identifier}`;
   const data = store[key];
   

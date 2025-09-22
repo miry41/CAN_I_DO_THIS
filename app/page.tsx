@@ -6,6 +6,7 @@ import BannerAd from "@/components/BannerAd";
 import LoadingOverlay from "@/components/LoadingOverlay";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { AnalyzeData, FileData, AnalyzeApiRequest } from "@/types";
 
 export default function Home() {
   const [isAnalyzing, setIsAnalyzing] = useState(false);
@@ -28,10 +29,7 @@ export default function Home() {
     });
   };
 
-  const handleAnalyze = async (data: {
-    text: string;
-    image: File | string | null;
-  }) => {
+  const handleAnalyze = async (data: AnalyzeData) => {
     setIsAnalyzing(true);
 
     try {

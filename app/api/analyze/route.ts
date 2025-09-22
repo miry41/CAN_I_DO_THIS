@@ -2,6 +2,12 @@ import { NextRequest, NextResponse } from 'next/server';
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { sanitizeInput, truncateText, strictSanitizeInput, sanitizeJsonData } from '@/lib/utils';
 import { checkRateLimit } from '@/lib/rate-limit';
+import { AnalyzeApiRequest, AnalysisResult, PromptInputContent } from '@/types';
+import { 
+  buildAnalysisPrompt, 
+  getFallbackPrompt, 
+  ANALYSIS_PROMPT_CONFIG 
+} from '@/lib/prompts';
 
 // セキュリティヘッダーを追加する関数
 function addSecurityHeaders(response: NextResponse) {
@@ -34,7 +40,7 @@ export async function POST(request: NextRequest) {
       );
     }
     
-    const { text, image, fileType } = await request.json();
+    const { text, image, fileType }: AnalyzeApiRequest = await request.json();
     console.log('Request data:', { text, hasImage: !!image, fileType });
 
     // 厳格な入力サニタイゼーションとバリデーション
@@ -54,58 +60,25 @@ export async function POST(request: NextRequest) {
     const apiKey = process.env.GEMINI_API_KEY;
     
     if (!apiKey || apiKey === 'YOUR_GEMINI_API_KEY_HERE') {
-      console.log('GEMINI_API_KEY is not configured');
       return NextResponse.json(
         { error: 'GEMINI_API_KEY is not configured' },
         { status: 500 }
       );
     }
 
-    // 入力内容を整理（サニタイズ済み）
-    let inputContent = '';
-    if (sanitizedText) inputContent += `Text: ${sanitizedText}\n`;
-    if (image) inputContent += `Image: [Image data provided]\n`;
+    // プロンプト用の入力データを準備
+    const promptInput: PromptInputContent = {
+      text: sanitizedText,
+      hasImage: !!image,
+    };
 
-    // GEMINI APIに送信するプロンプト（サニタイズ済み）
-    const prompt = `
-以下の問題を分析して、解決に必要な知識をJSON形式で返してください。
-
-問題内容:
-${inputContent}
-
-以下の形式でJSONを返してください:
-{
-  "problem": "問題の要約",
-  "knowledgeMap": {
-    "core_concepts": ["必要な核心概念1", "必要な核心概念2"],
-    "prerequisites": ["前提知識1", "前提知識2"],
-    "difficulty_level": "初級/中級/上級",
-    "estimated_time": "推定学習時間",
-    "learning_path": [
-      {
-        "step": 1,
-        "topic": "学習トピック",
-        "description": "説明",
-        "resources": ["リソース1", "リソース2"]
-      }
-    ]
-  },
-  "dependencies": [
-    {
-      "from": "前提項目",
-      "to": "依存項目", 
-      "relationship": "prerequisite"
-    }
-  ]
-}
-`;
+    // プロンプトを生成
+    const prompt = buildAnalysisPrompt(promptInput);
 
     // GEMINI APIを呼び出し
-    console.log('Calling GEMINI API...');
-    console.log('Has image:', !!image, 'FileType:', fileType);
     
     const genAI = new GoogleGenerativeAI(apiKey);
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-pro" });
+    const model = genAI.getGenerativeModel({ model: ANALYSIS_PROMPT_CONFIG.model });
     
     let geminiApiResponse;
     
@@ -135,29 +108,23 @@ ${inputContent}
         }
         
         if (imagePart) {
-          console.log('Sending multimodal request');
           geminiApiResponse = await model.generateContent([prompt, imagePart]);
         } else {
-          console.log('No valid image part, sending text only');
           geminiApiResponse = await model.generateContent(prompt);
         }
       } else {
         // テキストのみの場合
-        console.log('Sending text-only request');
         geminiApiResponse = await model.generateContent(prompt);
       }
-    } catch (apiError) {
-      console.error('GEMINI API call error:', apiError);
+    } catch (_) {
       const errorResponse = NextResponse.json(
         { error: 'AI service error. Please try again later.' },
         { status: 503 }
       );
       return addSecurityHeaders(errorResponse);
     }
-    console.log('GEMINI API response received');
     
     if (!geminiApiResponse || !geminiApiResponse.response) {
-      console.error('GEMINI API Error: No response');
       const errorResponse = NextResponse.json(
         { error: 'AI service temporarily unavailable. Please try again later.' },
         { status: 503 }
@@ -218,25 +185,36 @@ ${inputContent}
 }
 
 // 安全なフォールバック結果を生成
-function createSafeFallbackResult(text: string) {
-  return {
-    problem: text || "Uploaded content analysis",
-    knowledgeMap: {
-      core_concepts: ["Problem analysis", "Research skills"],
-      prerequisites: ["Basic analytical skills"],
-      difficulty_level: "Intermediate",
-      estimated_time: "2-4 weeks",
-      learning_path: [
-        {
-          step: 1,
-          topic: "Problem Analysis",
-          description: "Analyze the problem structure",
-          resources: ["Problem-solving frameworks"]
+function createSafeFallbackResult(text: string): AnalysisResult {
+  try {
+    // フォールバックプロンプトからJSONを解析して返す
+    const fallbackPromptJson = getFallbackPrompt();
+    return JSON.parse(fallbackPromptJson);
+  } catch (error) {
+    // JSONパースに失敗した場合のハードコードされたフォールバック
+    return {
+      problem: text || "アップロードされたコンテンツの解析",
+      knowledgeMap: {
+        core_concepts: ["問題分析", "リサーチスキル"],
+        prerequisites: ["基本的な分析スキル"],
+        difficulty_level: "中級",
+        estimated_time: "2-4週間",
+        learning_path: [
+          {
+            step: 1,
+            topic: "問題分析",
+            description: "問題の構造を分析する",
+            resources: ["問題解決フレームワーク"]
+          }
+        ]
+      },
+      dependencies: [
+        { 
+          from: "問題分析", 
+          to: "解決策の開発", 
+          relationship: "prerequisite" 
         }
       ]
-    },
-    dependencies: [
-      { from: "Problem Analysis", to: "Solution Development", relationship: "prerequisite" }
-    ]
-  };
+    };
+  }
 } 

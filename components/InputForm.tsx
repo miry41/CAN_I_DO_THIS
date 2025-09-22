@@ -1,14 +1,11 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { Upload, Zap } from 'lucide-react';
-
-interface InputFormProps {
-  onAnalyze: (data: { text: string; image: File | null }) => void;
-}
+import { useState } from "react";
+import { Upload, Zap } from "lucide-react";
+import { InputFormProps } from "@/types";
 
 export default function InputForm({ onAnalyze }: InputFormProps) {
-  const [text, setText] = useState('');
+  const [text, setText] = useState("");
   const [image, setImage] = useState<File | null>(null);
   const [dragActive, setDragActive] = useState(false);
 
@@ -33,9 +30,9 @@ export default function InputForm({ onAnalyze }: InputFormProps) {
     e.preventDefault();
     e.stopPropagation();
     setDragActive(false);
-    
+
     const files = e.dataTransfer.files;
-    if (files && files[0] && files[0].type.startsWith('image/')) {
+    if (files && files[0] && files[0].type.startsWith("image/")) {
       setImage(files[0]);
     }
   };
@@ -51,7 +48,10 @@ export default function InputForm({ onAnalyze }: InputFormProps) {
     <form onSubmit={handleSubmit} className="space-y-6">
       <div className="space-y-4">
         <div>
-          <label htmlFor="problem-text" className="block text-sm font-medium text-gray-700 mb-2">
+          <label
+            htmlFor="problem-text"
+            className="block text-sm font-medium text-gray-700 mb-2"
+          >
             Describe your problem or paste a URL
           </label>
           <textarea
@@ -70,9 +70,9 @@ export default function InputForm({ onAnalyze }: InputFormProps) {
           </label>
           <div
             className={`relative border-2 border-dashed rounded-xl p-6 text-center transition-colors ${
-              dragActive 
-                ? 'border-blue-500 bg-blue-50' 
-                : 'border-gray-300 hover:border-gray-400'
+              dragActive
+                ? "border-blue-500 bg-blue-50"
+                : "border-gray-300 hover:border-gray-400"
             }`}
             onDragEnter={handleDrag}
             onDragLeave={handleDrag}
@@ -119,8 +119,8 @@ export default function InputForm({ onAnalyze }: InputFormProps) {
         <Zap className="w-5 h-5" />
         <span>Analyze Problem</span>
       </button>
-      
-      {(!text.trim() && !image) && (
+
+      {!text.trim() && !image && (
         <p className="text-xs text-gray-500 text-center">
           Please provide either text or an image to analyze
         </p>

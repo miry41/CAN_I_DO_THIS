@@ -4,14 +4,9 @@ import { useState } from "react";
 import { Type, Upload } from "lucide-react";
 import TextInput from "./TextInput";
 import FileInput from "./FileInput";
+import { InputFormProps, TabType } from "@/types";
 
-interface InputTabsProps {
-  onAnalyze: (data: { text: string; image: File | string | null }) => void;
-}
-
-type TabType = "text" | "file";
-
-export default function InputTabs({ onAnalyze }: InputTabsProps) {
+export default function InputTabs({ onAnalyze }: InputFormProps) {
   const [activeTab, setActiveTab] = useState<TabType>("text");
 
   const tabs = [
