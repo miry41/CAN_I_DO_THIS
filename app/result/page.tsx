@@ -8,6 +8,7 @@ import KnowledgeGraph from "@/components/KnowledgeGraph";
 import ShareButtons from "@/components/ShareButtons";
 import BannerAd from "@/components/BannerAd";
 import LoadingOverlay from "@/components/LoadingOverlay";
+import { MobileLayout, MobileContainer } from "@/components/mobile";
 import { AnalysisResult } from "@/types";
 
 export default function ResultPage() {
@@ -125,22 +126,22 @@ export default function ResultPage() {
     <div className="flex flex-col h-screen">
       <Header />
       <main className="flex-1 overflow-hidden flex flex-col">
-        <div className="flex-1 overflow-y-auto px-4 py-8 pb-safe">
-          <div className="max-w-4xl mx-auto space-y-6">
+        <MobileLayout>
+          <MobileContainer maxWidth="max-w-4xl" className="space-y-6">
             <div className="text-center">
               <h2 className="text-3xl md:text-4xl font-bold text-white mb-4 drop-shadow-lg">
                 Analysis Complete!
               </h2>
               <p className="text-white/90 text-base md:text-lg font-medium drop-shadow-md">
-                Here's your knowledge roadmap
+                Here&apos;s your knowledge roadmap
               </p>
             </div>
 
             <ResultCard result={result} />
             <KnowledgeGraph dependencies={result.dependencies} />
             <ShareButtons />
-          </div>
-        </div>
+          </MobileContainer>
+        </MobileLayout>
       </main>
       <BannerAd />
     </div>

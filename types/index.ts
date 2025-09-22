@@ -90,6 +90,28 @@ export type SubmitStatus = "idle" | "success" | "error";
 export type DifficultyLevel = "beginner" | "intermediate" | "advanced";
 
 // ===========================================
+// モバイル関連の型定義
+// ===========================================
+
+export interface MobileMenuProps {
+  isOpen: boolean;
+  onToggle: () => void;
+  onClose: () => void;
+}
+
+export interface MobileHeaderProps {
+  title?: string;
+  subtitle?: string;
+  logoSrc?: string;
+  logoAlt?: string;
+}
+
+export interface MobileLayoutProps {
+  children: React.ReactNode;
+  className?: string;
+}
+
+// ===========================================
 // コンポーネントProps関連の型定義
 // ===========================================
 

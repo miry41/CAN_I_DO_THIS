@@ -2,15 +2,16 @@
 
 import Header from "@/components/Header";
 import BannerAd from "@/components/BannerAd";
+import { MobileLayout, MobileContainer, MobileCard } from "@/components/mobile";
 
 export default function Guide() {
   return (
     <div className="flex flex-col h-screen">
       <Header />
       <main className="flex-1 overflow-hidden flex flex-col">
-        <div className="flex-1 overflow-y-auto px-4 py-8 pb-safe">
-          <div className="max-w-4xl mx-auto">
-            <div className="bg-white rounded-2xl p-8 shadow-lg">
+        <MobileLayout>
+          <MobileContainer maxWidth="max-w-4xl">
+            <MobileCard className="p-8">
               <h1 className="text-3xl font-bold text-gray-900 mb-6">
                 How to Use CAN_I_DO_THIS??
               </h1>
@@ -441,9 +442,9 @@ export default function Guide() {
                   </div>
                 </section>
               </div>
-            </div>
-          </div>
-        </div>
+            </MobileCard>
+          </MobileContainer>
+        </MobileLayout>
       </main>
       <BannerAd />
     </div>

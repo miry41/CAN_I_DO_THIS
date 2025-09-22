@@ -4,6 +4,7 @@ import Header from "@/components/Header";
 import InputTabs from "@/components/InputTabs";
 import BannerAd from "@/components/BannerAd";
 import LoadingOverlay from "@/components/LoadingOverlay";
+import { MobileLayout, MobileContainer } from "@/components/mobile";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { AnalyzeData, FileData, AnalyzeApiRequest } from "@/types";
@@ -110,16 +111,16 @@ export default function Home() {
     <div className="flex flex-col h-screen">
       <Header />
       <main className="flex-1 overflow-hidden flex flex-col">
-        <div className="flex-1 overflow-y-auto px-4 py-8 pb-safe">
-          <div className="max-w-2xl mx-auto">
+        <MobileLayout>
+          <MobileContainer>
             <div className="text-center bg-white rounded-2xl">
               <h3 className="truncate text-xl sm:text-2xl md:text-3xl font-bold text-gray-900 mb-3">
                 What problem do you want to solve?
               </h3>
             </div>
             <InputTabs onAnalyze={handleAnalyze} />
-          </div>
-        </div>
+          </MobileContainer>
+        </MobileLayout>
       </main>
       <BannerAd />
       {isAnalyzing && <LoadingOverlay />}
